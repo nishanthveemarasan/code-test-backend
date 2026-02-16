@@ -1,0 +1,72 @@
+services:
+  #PHP Service
+  code_exam_backend:
+    build:
+      context: .
+      #dockerfile: Dockerfile
+    image: only_coders_php_service
+    container_name: code_exam_backend_containers
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: code_exam_backend_service
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+
+    networks:
+      - app-network
+      - shared-network
+  #Nginx Service
+  webservers_code_exam:
+    image: nginx:alpine
+    container_name: webservers_code_exam_container
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "127.0.0.1:92:80"
+      - "127.0.0.1:8445:443"
+
+    volumes:
+      - ./:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+      - shared-network
+    
+  #MySQL Service
+  db_code_backend:
+    image: mysql:5.7.22
+    container_name: db_code_backend_container
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "127.0.0.1:1310:3306"
+    environment:
+        MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+        MYSQL_ROOT_HOST: "%"
+        MYSQL_DATABASE: '${DB_DATABASE}'
+        MYSQL_USER: '${DB_USERNAME}'
+        MYSQL_PASSWORD: '${DB_PASSWORD}'
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+      - lbdata:/var/lib/mysql2/
+    #      - ./mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - app-network
+      - shared-network
+    #PHP Service
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+  shared-network:
+    external: true 
+#Volumes
+volumes:
+  lbdata:
+    driver: local
+  database-data:
+    driver: local
