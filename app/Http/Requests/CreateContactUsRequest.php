@@ -24,8 +24,21 @@ class CreateContactUsRequest extends FormRequest
         return [
             'name' => 'required|string|max:50',
             'email' => 'required|email|max:100',
+            'phone' => 'required|string|regex:/^\+?[1-9]\d{1,14}$/|max:20',
             'subject' => 'required|string|max:100',
             'message' => 'required|string',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'A Name is required',
+            'email.required' => 'An Email address is required',
+            'phone.required' => 'A Valid Phone number is required',
+            'phone.regex' => 'A Valid Phone number is required',
+            'subject.required' => 'A Subject is required',
+            'message.required' => 'A Message is required',
         ];
     }
 

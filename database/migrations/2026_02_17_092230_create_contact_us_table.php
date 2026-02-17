@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email');
+            $table->string('phone');
             $table->string('subject', 100);
             $table->text('message');
             $table->enum('staus', ContactUsStatus::cases())->default(ContactUsStatus::PENDING->value);

@@ -5,7 +5,6 @@ use App\Models\ContactUs;
 
 class ContactUsService{
     public function create(array $data){
-        ContactUs::create($data);
-        return true;
+        return ContactUs::create($data);
     }
 }
