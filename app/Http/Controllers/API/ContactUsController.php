@@ -19,7 +19,7 @@ class ContactUsController extends Controller
     public function store(CreateContactUsRequest $request){
         try{
             $this->contactUsService->create($request->validated());
-            return ApiResponse::success("Your Message sent successfully");
+            return ApiResponse::success("Your Message sent successfully! We will get back to you soon.");
         }catch(Exception $e){
             Log::error("Error storing contact us message: " . $e->getMessage(). " in file: " . $e->getFile() . " on line: " . $e->getLine());
             return ApiResponse::error(self::ERROR_MSG);
