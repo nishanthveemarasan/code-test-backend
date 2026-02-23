@@ -52,7 +52,12 @@ class User extends Authenticatable
         return $this->hasOne(ContactInfo::class);
     }
 
-        public function experiences() {
-            return $this->hasMany(Experience::class);
-        }
+    public function experiences() {
+        return $this->hasMany(Experience::class);
+    }
+
+    public function educations()
+    {
+        return $this->hasMany(Education::class);
+    }
 }

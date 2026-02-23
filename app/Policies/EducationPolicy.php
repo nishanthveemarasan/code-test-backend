@@ -29,7 +29,7 @@ class EducationPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -37,7 +37,7 @@ class EducationPolicy
      */
     public function update(User $user, Education $education): bool
     {
-        return false;
+        return $user->id === $education->user_id;
     }
 
     /**
@@ -45,7 +45,7 @@ class EducationPolicy
      */
     public function delete(User $user, Education $education): bool
     {
-        return false;
+        return $user->id === $education->user_id;
     }
 
     /**

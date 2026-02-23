@@ -10,8 +10,8 @@ class ExperienceService
     /**
      * Method createExperience
      *
-     * @param User $user [explicite description]
-     * @param array $data [explicite description]
+     * @param User $user
+     * @param array $data
      *
      * @return Experience
      */
@@ -23,18 +23,14 @@ class ExperienceService
     /**
      * Method updateExperience
      *
-     * @param User $user [explicite description]
-     * @param Experience $experience [explicite description]
-     * @param array $data [explicite description]
+     * @param User $user
+     * @param Experience $experience
+     * @param array $data
      *
      * @return Experience
      */
     public function updateExperience(array $data, User $user, Experience $experience): Experience
     {
-        if ($experience->user_id !== $user->id) {
-            abort(403);
-        }
-
         $experience->update($data);
 
         return $experience;
@@ -43,17 +39,13 @@ class ExperienceService
     /**
      * Method deleteExperience
      *
-     * @param User $user [explicite description]
-     * @param Experience $experience [explicite description]
+     * @param User $user
+     * @param Experience $experience
      *
      * @return void
      */
     public function deleteExperience(User $user, Experience $experience): void
     {
-        if ($experience->user_id !== $user->id) {
-            abort(403);
-        }
-
         $experience->delete();
     }
 }

@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('education', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->integer('from');
+            $table->integer('to')->nullable();
+            $table->string('course');
+            $table->string('institution');
+            $table->text('description')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

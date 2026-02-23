@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,19 @@ class EducationFactory extends Factory
      */
     public function definition(): array
     {
+        $start = $this->faker->numberBetween(2000, 2015);
+
         return [
-            //
+            'user_id' => User::factory(),
+            'from' => $start,
+            'to' => $start + rand(2, 5),
+            'course' => $this->faker->randomElement([
+                'B.Eng Civil Engineering',
+                'BSc Computer Science',
+                'MBA Project Management'
+            ]),
+            'institution' => $this->faker->company . ' University',
+            'description' => $this->faker->paragraph,
         ];
     }
 }

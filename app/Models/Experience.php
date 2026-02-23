@@ -31,9 +31,9 @@ class Experience extends Model
     }
 
     public function getRouteKeyName(): string
-{
-    return 'uuid';
-}
+    {
+        return 'uuid';
+    }
 
     public function user()
     {

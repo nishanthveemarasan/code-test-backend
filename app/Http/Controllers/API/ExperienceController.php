@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Helper\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SaveContactInfoRequest;
 use App\Http\Requests\StoreExperienceRequest;
 use App\Models\Experience;
 use App\Services\ExperienceService;
@@ -17,13 +16,13 @@ class ExperienceController extends Controller
 
     
     /**
-     * Method storeExperience
+     * Method store
      *
      * @param StoreExperienceRequest $request [explicite description]
      *
      * @return void
      */
-    public function storeExperience(StoreExperienceRequest $request)
+    public function store(StoreExperienceRequest $request)
     {
        Gate::authorize('create', Experience::class);
         try {
@@ -34,20 +33,20 @@ class ExperienceController extends Controller
 
             return ApiResponse::success("Experience created successfully");
         } catch (\Exception $e) {
-            Log::channel('exception')->error('Registration failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
+            Log::channel('exception')->error('Create Experience Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
             return ApiResponse::error("Failed to create Experience");
         }
     }
     
     /**
-     * Method updateExperience
+     * Method update
      *
      * @param StoreExperienceRequest $request [explicite description]
      * @param Experience $experience [explicite description]
      *
      * @return void
      */
-    public function updateExperience(StoreExperienceRequest $request, Experience $experience)
+    public function update(StoreExperienceRequest $request, Experience $experience)
     {
         Gate::authorize('update', $experience);
         try {
@@ -58,19 +57,19 @@ class ExperienceController extends Controller
             );
             return ApiResponse::success("Experience updated successfully");
         } catch (\Exception $e) {
-            Log::channel('exception')->error('Registration failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
+            Log::channel('exception')->error('Update Experience Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
             return ApiResponse::error("Failed to update Experience");
         }
     }
     
     /**
-     * Method deleteExperience
+     * Method delete
      *
      * @param Experience $experience [explicite description]
      *
      * @return void
      */
-    public function deleteExperience(Experience $experience)
+    public function delete(Experience $experience)
     {
         Gate::authorize('delete', $experience);
         try {
@@ -81,8 +80,8 @@ class ExperienceController extends Controller
 
             return ApiResponse::success("Experience deleted successfully!");
         } catch (\Exception $e) {
-            Log::channel('exception')->error('Registration failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
-            return ApiResponse::error("Failed to update Experience");
+            Log::channel('exception')->error('Delete Experience Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
+            return ApiResponse::error("Failed to delete Experience");
         }
     }
 }
