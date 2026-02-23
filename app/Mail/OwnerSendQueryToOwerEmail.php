@@ -9,6 +9,8 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class OwnerSendQueryToOwerEmail extends Mailable
 {
@@ -50,5 +52,13 @@ class OwnerSendQueryToOwerEmail extends Mailable
     public function attachments(): array
     {
         return [];
+    }
+
+    public function failed(Throwable $exception): void
+    {
+         Log::channel('queueException')->critical('Queue Mail Failed: Notify Owner', [
+            'error' => $exception->getMessage(),
+            'data' => $this->contactUs->toArray()
+        ]);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Helper\ApiResponse;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -32,9 +33,10 @@ class AuthService{
         $user = Auth::user();
         $token = $user->createToken('Personal Access Token')->accessToken;
 
-        return response()->json([
-            'user'  => $user,
-            'token' => $token,
-        ], 200);
+        return [
+            'user' => $user->only(['name']),
+            'token' => $token
+        ];
+
     }
 }

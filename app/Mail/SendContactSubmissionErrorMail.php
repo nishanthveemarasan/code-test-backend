@@ -2,7 +2,6 @@
 
 namespace App\Mail;
 
-use App\Models\ContactUs;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -12,16 +11,16 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
-class SendNotifyUserEmail extends Mailable
+class SendContactSubmissionErrorMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(public ContactUs $contactUs)
+    public function __construct(public array $contactFormData, public string $errorMessage)
     {
-        
+        //
     }
 
     /**
@@ -30,7 +29,7 @@ class SendNotifyUserEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'We received your message!',
+            subject: 'CRITICAL:- SUBMISSION ERROR OCCURRED IN CONTACT US FORM',
         );
     }
 
@@ -40,7 +39,7 @@ class SendNotifyUserEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.notify_user',
+            view: 'emails.submission-failed',
         );
     }
 
@@ -56,9 +55,10 @@ class SendNotifyUserEmail extends Mailable
 
     public function failed(Throwable $exception): void
     {
-         Log::channel('queueException')->critical('Queue Mail Failed: Notify User', [
+         Log::channel('queueException')->critical('Queue Mail Failed: Contact Form', [
             'error' => $exception->getMessage(),
-            'data' => $this->contactUs->toArray()
+            'data' => $this->contactFormData,
+            'original_error' => $this->errorMessage,
         ]);
     }
 }

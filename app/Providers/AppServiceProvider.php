@@ -2,9 +2,12 @@
 
 namespace App\Providers;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Passport\Passport;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,5 +29,13 @@ class AppServiceProvider extends ServiceProvider
         Passport::tokensCan([
             'client_authentication' => 'Client only access',
         ]);
+
+        RateLimiter::for('global_api', function (Request $request) {
+            return Limit::perMinute(60)->by($request->ip());
+        });
+
+        RateLimiter::for('contact_form', function (Request $request) {
+            return Limit::perMinute(5)->by($request->ip());
+        });
     }
 }

@@ -24,7 +24,7 @@ class CreateContactUsRequest extends FormRequest
         return [
             'name' => 'required|string|max:50',
             'email' => 'required|email|max:100',
-            'phone' => 'required|string|regex:/^\+?[1-9]\d{1,14}$/|max:20',
+            'phone' => 'required|string|regex:/^\+?[1-9]\d{1,14}$/|max:15',
             'subject' => 'required|string|max:100',
             'message' => 'required|string',
         ];

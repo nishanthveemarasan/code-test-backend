@@ -44,7 +44,7 @@ class ContactUsSubscriber implements ShouldQueue
      */
     public function handleNotifyOwner(NotifyOwnerEvent $event): void
     {
-        Mail::to('test@gmai.com')->send(new OwnerSendQueryToOwerEmail($event->contactUs));
+        Mail::to(config('admin.owner.email'))->send(new OwnerSendQueryToOwerEmail($event->contactUs));
     }
     
     /**
