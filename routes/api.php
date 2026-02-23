@@ -7,6 +7,7 @@ use App\Http\Controllers\API\ExperienceController;
 use App\Http\Controllers\API\TokenController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\SkillController;
+use App\Http\Controllers\TestimonialController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,11 @@ Route::middleware(['auth:api'])->name('api.')->group(function () {
         });
         Route::prefix('skill')->name('skill.')->controller(SkillController::class)->group(function () {
             Route::post('/', 'store')->name('store');
+        });
+        Route::prefix('testimonial')->name('testimonial.')->controller(TestimonialController::class)->group(function () {
+            Route::post('/', 'store')->name('store');
+            Route::patch('{testimonial}', 'update')->name('update');
+            Route::delete('{testimonial}', 'delete')->name('delete');
         });
     
    });

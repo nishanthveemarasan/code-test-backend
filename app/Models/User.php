@@ -67,4 +67,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Skill::class);
     }
+
+    public function testimonials()
+    {
+        return $this->hasMany(Testimonial::class);
+    }
 }
