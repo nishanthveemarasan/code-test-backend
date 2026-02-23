@@ -48,16 +48,23 @@ class User extends Authenticatable
         ];
     }
 
-    public function contactInfo() {
+    public function contactInfo()
+    {
         return $this->hasOne(ContactInfo::class);
     }
 
-    public function experiences() {
+    public function experiences()
+    {
         return $this->hasMany(Experience::class);
     }
 
     public function educations()
     {
         return $this->hasMany(Education::class);
+    }
+
+    public function skills()
+    {
+        return $this->hasMany(Skill::class);
     }
 }

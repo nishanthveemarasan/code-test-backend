@@ -6,6 +6,7 @@ use App\Http\Controllers\API\EducationController;
 use App\Http\Controllers\API\ExperienceController;
 use App\Http\Controllers\API\TokenController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\SkillController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,9 @@ Route::middleware(['auth:api'])->name('api.')->group(function () {
             Route::post('/', 'store')->name('store');
             Route::patch('{education}', 'update')->name('update');
             Route::delete('{education}', 'destroy')->name('destroy');
+        });
+        Route::prefix('skill')->name('skill.')->controller(SkillController::class)->group(function () {
+            Route::post('/', 'store')->name('store');
         });
     
    });
