@@ -6,6 +6,8 @@ use App\Http\Controllers\API\EducationController;
 use App\Http\Controllers\API\ExperienceController;
 use App\Http\Controllers\API\TokenController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\TestimonialController;
 use Illuminate\Http\Request;
@@ -13,7 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:api'])->name('api.')->group(function () {
    Route::prefix('user')->name('user.')->controller(UserController::class)->group(function(){
-        Route::post('contact-info', 'store')->name('contact-info');
+        Route::post('profile-info', 'store')->name('profile-info');
+        Route::post('main-page', 'storeMainPage')->name('main-page-info');
         Route::prefix('experience')->name('experience.')->controller(ExperienceController::class)->group(function(){
             Route::post('/', 'store')->name('store');
             Route::patch('/{experience}', 'update')->name('update');
@@ -31,6 +34,16 @@ Route::middleware(['auth:api'])->name('api.')->group(function () {
             Route::post('/', 'store')->name('store');
             Route::patch('{testimonial}', 'update')->name('update');
             Route::delete('{testimonial}', 'delete')->name('delete');
+        });
+        Route::prefix('service')->name('service.')->controller(ServiceController::class)->group(function () {
+            Route::post('/', 'store')->name('store');
+            Route::patch('{service}', 'update')->name('update');
+            Route::delete('{service}', 'delete')->name('delete');
+        });
+        Route::prefix('project')->name('project.')->controller(ProjectController::class)->group(function () {
+            Route::post('/', 'save')->name('store');
+            Route::post('/{project}', 'save')->name('update');
+            Route::delete('/{project}', 'delete')->name('delete');
         });
     
    });

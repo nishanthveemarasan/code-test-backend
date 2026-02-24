@@ -48,9 +48,9 @@ class User extends Authenticatable
         ];
     }
 
-    public function contactInfo()
+    public function profile()
     {
-        return $this->hasOne(ContactInfo::class);
+        return $this->hasOne(Profile::class);
     }
 
     public function experiences()
@@ -71,5 +71,20 @@ class User extends Authenticatable
     public function testimonials()
     {
         return $this->hasMany(Testimonial::class);
+    }
+
+    public function services()
+    {
+        return $this->hasMany(Service::class);
+    }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
+    }
+
+    public function mainPage()
+    {
+        return $this->hasOne(MainPage::class);
     }
 }

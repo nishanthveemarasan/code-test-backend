@@ -5,4 +5,5 @@ enum SkillAction: string
 {
     case ADD = "add";
     case DELETE = "delete";
+    case UPDATE = "update";
 }

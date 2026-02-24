@@ -4,9 +4,11 @@ namespace App\Http\Controllers\API;
 
 use App\Helper\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SaveContactInfoRequest;
+use App\Http\Requests\StoreMainPageRequest;
+use App\Http\Requests\StoreProfileRequest;
 use App\Services\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
@@ -19,24 +21,37 @@ class UserController extends Controller
     /**
      * Method store
      *
-     * @param SaveContactInfoRequest $request [explicite description]
+     * @param StoreProfileRequest $request [explicite description]
      *
      * @return void
      */
-    public function store(SaveContactInfoRequest $request){
-
+    public function store(StoreProfileRequest $request){
         try{
+            DB::beginTransaction();
             $response = $this->userService->store($request->validated(), auth()->user());
-            if($response){
-                return ApiResponse::success("Contact info saved successfully");
-            }
+            DB::commit();
+            return ApiResponse::success("Profile info saved successfully");
         }catch(\Exception $e){
-            Log::channel('exception')->error('Registration failed: ' . $e->getMessage(). ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
-            return ApiResponse::error("Failed to save contact info");
+            DB::rollBack();
+            Log::channel('exception')->error('Update Profile failed: ' . $e->getMessage(). ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
+            return ApiResponse::error("Failed to save Profile info");
         }
     }
 
-    
+    public function storeMainPage(StoreMainPageRequest $request){
+        
+        try{
+            DB::beginTransaction();
+            $response = $this->userService->storeMainPage($request->validated(), auth()->user());
+            DB::commit();
+            return ApiResponse::success("Main page info saved successfully");
+        }catch(\Exception $e){
+            DB::rollBack();
+            Log::channel('exception')->error('Update Main Page failed: ' . $e->getMessage(). ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
+            return ApiResponse::error("Failed to save Main page info");
+        }
+
+    }
 
 
 }
