@@ -17,6 +17,7 @@ class ExperienceController extends Controller
     
     public function list()
     {
+        Gate::authorize('viewAny', Experience::class);
         try {
             $experiences = $this->service->list(auth()->user());
             return ApiResponse::success("Experiences retrieved successfully", $experiences);

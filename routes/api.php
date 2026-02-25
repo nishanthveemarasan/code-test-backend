@@ -31,6 +31,7 @@ Route::middleware(['auth:api'])->name('api.')->group(function () {
             Route::delete('/{experience}', 'delete')->name('delete');
         });
         Route::prefix('education')->name('education.')->controller(EducationController::class)->group(function () {
+            Route::get('/', 'list')->name('list');
             Route::post('/', 'store')->name('store');
             Route::patch('{education}', 'update')->name('update');
             Route::delete('{education}', 'destroy')->name('destroy');

@@ -15,6 +15,17 @@ class EducationController extends Controller
 {
     public function __construct(protected EducationService $service){}
 
+    public function list()
+    {
+        Gate::authorize('viewAny', Education::class);
+        try {
+            $response = $this->service->list(auth()->user());
+            return ApiResponse::success("Education list retrieved successfully", $response);
+        } catch (\Exception $e) {
+            Log::channel('exception')->error('List Education Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
+            return ApiResponse::error("Failed to retrieve Education list");
+        }
+    }
     public function store(StoreEducationRequest $request)
     {
         Gate::authorize('create', Education::class);

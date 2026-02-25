@@ -2,12 +2,21 @@
 
 namespace App\Services;
 
+use App\Http\Resources\EducationResource;
 use App\Models\Education;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class EducationService
-{    
+{   
+    
+    public function list(User $user)
+    {
+        $paginateList = $user->educations()->orderBy('from', 'asc')->paginate(10);
+        return EducationResource::collection($paginateList)->response()
+            ->getData(true);
+    }
+
     /**
      * Method store
      *
