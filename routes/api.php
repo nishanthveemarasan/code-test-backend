@@ -37,14 +37,17 @@ Route::middleware(['auth:api'])->name('api.')->group(function () {
             Route::delete('{education}', 'destroy')->name('destroy');
         });
         Route::prefix('skill')->name('skill.')->controller(SkillController::class)->group(function () {
+            Route::get('/', 'get')->name('get');
             Route::post('/', 'store')->name('store');
         });
         Route::prefix('testimonial')->name('testimonial.')->controller(TestimonialController::class)->group(function () {
+            Route::get('/', 'list')->name('list');
             Route::post('/', 'store')->name('store');
             Route::patch('{testimonial}', 'update')->name('update');
             Route::delete('{testimonial}', 'delete')->name('delete');
         });
         Route::prefix('service')->name('service.')->controller(ServiceController::class)->group(function () {
+            Route::post('/', 'store')->name('store');
             Route::post('/', 'store')->name('store');
             Route::patch('{service}', 'update')->name('update');
             Route::delete('{service}', 'delete')->name('delete');

@@ -15,6 +15,18 @@ use Illuminate\Support\Facades\Log;
 class SkillController extends Controller
 {
     public function __construct(protected SkillService $service) {}
+
+    public function get()
+    {
+        Gate::authorize('viewAny', Skill::class);
+        try {
+            $skills = $this->service->get(auth()->user());
+            return ApiResponse::success("Skills retrieved successfully", $skills);
+        } catch (\Exception $e) {
+            Log::channel('exception')->error('Get Skills Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
+            return ApiResponse::error("Failed to retrieve Skills");
+        }
+    }
     public function store(StoreSkillRequest $request)
     {
         Gate::authorize('create', Skill::class);

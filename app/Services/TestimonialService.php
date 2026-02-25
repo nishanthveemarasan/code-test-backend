@@ -7,6 +7,12 @@ use App\Models\User;
 
 class TestimonialService
 {
+
+    public function list(User $user)
+    {
+        $testimonials = $user->testimonials()->paginate(10);
+        return $testimonials->toResourceCollection()->response()->getData(true);
+    }
     public function store(array $data, User $user): Testimonial
     {
         return $user->testimonials()->create($data);

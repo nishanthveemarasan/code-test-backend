@@ -14,6 +14,18 @@ class TestimonialController extends Controller
 {
     public function __construct(protected TestimonialService $service) {}
 
+    public function list()
+    {
+        Gate::authorize('viewAny', Testimonial::class);
+        try {
+            $testimonials = $this->service->list(auth()->user());
+            return ApiResponse::success("Testimonials retrieved successfully", $testimonials);
+        } catch (\Exception $e) {
+            Log::channel('exception')->error('Get Testimonials Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
+            return ApiResponse::error("Failed to retrieve Testimonials");
+        }
+    }
+
     public function store(StoreTestimonialRequest $request)
     {
         Gate::authorize('create', Testimonial::class);
