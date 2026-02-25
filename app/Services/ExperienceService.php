@@ -2,11 +2,19 @@
 
 namespace App\Services;
 
+use App\Http\Resources\ExperienceResource;
 use App\Models\Experience;
 use App\Models\User;
 
 class ExperienceService
-{    
+{
+
+    public function list(User $user)
+    {
+        $paginateList = $user->experiences()->orderBy('from', 'asc')->paginate(10);
+        return ExperienceResource::collection($paginateList)->response()
+            ->getData(true);
+    }
     /**
      * Method createExperience
      *
@@ -19,7 +27,7 @@ class ExperienceService
     {
         return $user->experiences()->create($data);
     }
-    
+
     /**
      * Method updateExperience
      *
@@ -35,7 +43,7 @@ class ExperienceService
 
         return $experience;
     }
-    
+
     /**
      * Method deleteExperience
      *

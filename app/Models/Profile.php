@@ -23,6 +23,8 @@ class Profile extends Model
         'address'
     ];
 
+    protected $with = ['file'];
+
     protected static function booted()
     {
         static::creating(function ($profile) {

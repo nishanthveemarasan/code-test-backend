@@ -15,6 +15,16 @@ class ExperienceController extends Controller
     public function __construct(protected ExperienceService $service) {}
 
     
+    public function list()
+    {
+        try {
+            $experiences = $this->service->list(auth()->user());
+            return ApiResponse::success("Experiences retrieved successfully", $experiences);
+        } catch (\Exception $e) {
+            Log::channel('exception')->error('List Experiences Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
+            return ApiResponse::error("Failed to retrieve Experiences");
+        }
+    }
     /**
      * Method store
      *

@@ -13,11 +13,8 @@ use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
-    public function __construct(protected UserService $userService)
-    {
-        
-    }
-    
+    public function __construct(protected UserService $userService) {}
+
     /**
      * Method store
      *
@@ -25,33 +22,54 @@ class UserController extends Controller
      *
      * @return void
      */
-    public function store(StoreProfileRequest $request){
-        try{
+    public function store(StoreProfileRequest $request)
+    {
+        try {
             DB::beginTransaction();
             $response = $this->userService->store($request->validated(), auth()->user());
             DB::commit();
             return ApiResponse::success("Profile info saved successfully");
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             DB::rollBack();
-            Log::channel('exception')->error('Update Profile failed: ' . $e->getMessage(). ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
+            Log::channel('exception')->error('Update Profile failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
             return ApiResponse::error("Failed to save Profile info");
         }
     }
 
-    public function storeMainPage(StoreMainPageRequest $request){
-        
-        try{
+    public function storeMainPage(StoreMainPageRequest $request)
+    {
+
+        try {
             DB::beginTransaction();
             $response = $this->userService->storeMainPage($request->validated(), auth()->user());
             DB::commit();
             return ApiResponse::success("Main page info saved successfully");
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             DB::rollBack();
-            Log::channel('exception')->error('Update Main Page failed: ' . $e->getMessage(). ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
+            Log::channel('exception')->error('Update Main Page failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
             return ApiResponse::error("Failed to save Main page info");
         }
-
     }
 
+    public function getData()
+    {
+        try {
+            $response = $this->userService->getData(auth()->user());
+            return ApiResponse::success("Main page info retrieved successfully", $response);
+        } catch (\Exception $e) {
+            Log::channel('exception')->error('Get Main Page failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
+            return ApiResponse::error("Failed to retrieve Main page info");
+        }
+    }
 
+    public function getProfileData()
+    {
+        try {
+            $response = $this->userService->getProfileData(auth()->user());
+            return ApiResponse::success("Profile info retrieved successfully", $response);
+        } catch (\Exception $e) {
+            Log::channel('exception')->error('Get Profile failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
+            return ApiResponse::error("Failed to retrieve Profile info");
+        }
+    }
 }

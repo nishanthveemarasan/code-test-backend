@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Http\Resources\HomepageResource;
+use Illuminate\Database\Eloquent\Attributes\UseResource;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-
+#[UseResource(HomepageResource::class)]
 class MainPage extends Model
 {
     /** @use HasFactory<\Database\Factories\MainPageFactory> */
@@ -18,6 +20,8 @@ class MainPage extends Model
         'title',
         'description',
     ];
+
+    protected $with = ['files'];
 
     public function getRouteKeyName()
     {
@@ -49,5 +53,7 @@ class MainPage extends Model
     {
         return $this->morphMany(File::class, 'fileable');
     }
+
+    
 
 }

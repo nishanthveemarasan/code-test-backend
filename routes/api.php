@@ -15,9 +15,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:api'])->name('api.')->group(function () {
    Route::prefix('user')->name('user.')->controller(UserController::class)->group(function(){
-        Route::post('profile-info', 'store')->name('profile-info');
-        Route::post('main-page', 'storeMainPage')->name('main-page-info');
+        Route::prefix('profile-info')->name('profile-info.')->group(function(){
+            Route::get('/', 'getProfileData')->name('get-profile');
+            Route::post('/', 'store')->name('profile-info');
+        });
+        Route::prefix('main-page')->name('main-page.')->group(function(){
+            Route::get('/', 'getData')->name('get');
+            Route::post('', 'storeMainPage')->name('main-page-info');
+
+        });
         Route::prefix('experience')->name('experience.')->controller(ExperienceController::class)->group(function(){
+            Route::get('/', 'list')->name('list');
             Route::post('/', 'store')->name('store');
             Route::patch('/{experience}', 'update')->name('update');
             Route::delete('/{experience}', 'delete')->name('delete');
