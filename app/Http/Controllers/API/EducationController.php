@@ -30,12 +30,12 @@ class EducationController extends Controller
     {
         Gate::authorize('create', Education::class);
         try {
-            $this->service->store(
+            $response = $this->service->store(
                 $request->validated(),
                 auth()->user()
             );
 
-            return ApiResponse::success("Education created successfully");
+            return ApiResponse::success("Education created successfully", $response);
         } catch (\Exception $e) {
             Log::channel('exception')->error('Create Education Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
             return ApiResponse::error("Failed to create Education");

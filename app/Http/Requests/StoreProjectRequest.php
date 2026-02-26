@@ -39,7 +39,7 @@ class StoreProjectRequest extends FormRequest
             ],
             'type' => ['required', 'string', 'max:255'],
             'city' => ['required', 'string', 'max:255'],
-            'image' =>['required', 'image', 'mimes:jpeg,jpg,png', 'max:2048'],
+            'image' =>[$projectId ? 'nullable' : 'required', 'image', 'mimes:jpeg,jpg,png', 'max:2048'],
         ];
     }
 }

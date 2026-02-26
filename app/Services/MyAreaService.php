@@ -6,6 +6,12 @@ use App\Models\User;
 
 class MyAreaService{
     
+
+    public function list(User $user)
+    {
+        $services = $user->services()->paginate(10);
+        return $services->toResourceCollection()->response()->getData(true);
+    }
     /**
      * Method store
      *

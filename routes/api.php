@@ -47,12 +47,13 @@ Route::middleware(['auth:api'])->name('api.')->group(function () {
             Route::delete('{testimonial}', 'delete')->name('delete');
         });
         Route::prefix('service')->name('service.')->controller(ServiceController::class)->group(function () {
-            Route::post('/', 'store')->name('store');
+            Route::get('/', 'list')->name('list');
             Route::post('/', 'store')->name('store');
             Route::patch('{service}', 'update')->name('update');
             Route::delete('{service}', 'delete')->name('delete');
         });
         Route::prefix('project')->name('project.')->controller(ProjectController::class)->group(function () {
+            Route::get('/', 'list')->name('list');
             Route::post('/', 'save')->name('store');
             Route::post('/{project}', 'save')->name('update');
             Route::delete('/{project}', 'delete')->name('delete');

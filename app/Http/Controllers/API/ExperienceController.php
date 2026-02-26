@@ -36,13 +36,13 @@ class ExperienceController extends Controller
     public function store(StoreExperienceRequest $request)
     {
        Gate::authorize('create', Experience::class);
-        try {
-            $experience = $this->service->createExperience(
+       try {
+            $response = $this->service->createExperience(
                 $request->validated(),
                 auth()->user()
             );
 
-            return ApiResponse::success("Experience created successfully");
+            return ApiResponse::success("Experience created successfully", $response);
         } catch (\Exception $e) {
             Log::channel('exception')->error('Create Experience Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
             return ApiResponse::error("Failed to create Experience");

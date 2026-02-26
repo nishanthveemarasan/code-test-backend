@@ -23,11 +23,12 @@ class EducationService
      * @param array $data
      * @param User $user
      *
-     * @return Education
+     * @return array
      */
-    public function store(array $data, User $user): Education
+    public function store(array $data, User $user): array
     {
-        return $user->educations()->create($data);
+        $education =  $user->educations()->create($data);
+        return ['uuid' => $education->uuid];
     }
     
     /**

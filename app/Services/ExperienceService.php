@@ -21,11 +21,12 @@ class ExperienceService
      * @param User $user
      * @param array $data
      *
-     * @return Experience
+     * @return array
      */
-    public function createExperience(array $data, User $user): Experience
+    public function createExperience(array $data, User $user): array
     {
-        return $user->experiences()->create($data);
+        $experience =  $user->experiences()->create($data);
+        return ['uuid' => $experience->uuid];
     }
 
     /**

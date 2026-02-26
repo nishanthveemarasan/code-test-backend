@@ -28,7 +28,7 @@ class UserController extends Controller
             DB::beginTransaction();
             $response = $this->userService->store($request->validated(), auth()->user());
             DB::commit();
-            return ApiResponse::success("Profile info saved successfully");
+            return ApiResponse::success("Profile info saved successfully", $response);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::channel('exception')->error('Update Profile failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());

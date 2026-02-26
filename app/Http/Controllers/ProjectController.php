@@ -15,6 +15,18 @@ class ProjectController extends Controller
 {
     public function __construct(protected ProjectService $service) {}
 
+    public function list()
+    {
+        Gate::authorize('viewAny', Project::class);
+        try {
+            $projects = $this->service->list(auth()->user());
+            return ApiResponse::success("Projects retrieved successfully", $projects);
+        } catch (\Exception $e) {
+            Log::channel('exception')->error('Get Projects Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
+            return ApiResponse::error("Failed to retrieve Projects");
+        }
+    }
+
     public function save(StoreProjectRequest $request, ?Project $project = null)
     {
        if ($project) {
@@ -25,9 +37,9 @@ class ProjectController extends Controller
 
         try {
             DB::beginTransaction();
-            $this->service->storeOrUpdate($request->validated(), auth()->user(), $project);
+            $response = $this->service->storeOrUpdate($request->validated(), auth()->user(), $project);
             DB::commit();
-            return ApiResponse::success("Project saved successfully");
+            return ApiResponse::success("Project saved successfully", $response);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::channel('exception')->error('Update Project Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());

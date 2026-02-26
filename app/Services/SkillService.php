@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Enums\SkillAction;
+
 class SkillService
 {
     public function get($user)
@@ -12,18 +14,25 @@ class SkillService
     public function updateSkills($user, $skills)
     {
         foreach ($skills as $skill) {
-            if ($skill['action'] === 'add') {
-                $skill = $user->skills()->firstOrCreate([
-                    'name' => $skill['name']
-                ]);
-            } elseif ($skill['action'] === 'delete') {
-                $skill = $user->skills()
-                    ->where('name', $skill['name'])
-                    ->first();
-                if ($skill) {
-                    $skill->delete();
-                }
+            $action = SkillAction::tryFrom($skill['action']);
+            switch ($action) {
+                case SkillAction::ADD:
+                    $user->skills()->firstOrCreate([
+                        'name' => $skill['name']
+                    ]);
+                    break;
+                case SkillAction::DELETE:
+                    $skillToDelete = $user->skills()
+                        ->where('uuid', $skill['uuid'])
+                        ->first();
+                    if ($skillToDelete) {
+                        $skillToDelete->delete();
+                    }
+                    break;
+                default:
+                    break;
             }
+            
         }
     }
 }

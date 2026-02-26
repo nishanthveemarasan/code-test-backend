@@ -21,6 +21,8 @@ class Project extends Model
         'city',
     ];
 
+    protected $with = ['file'];
+
     public static function booted()
     {
         static::creating(function ($project) {

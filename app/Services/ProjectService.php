@@ -7,6 +7,12 @@ use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 
 class ProjectService{
+
+        public function list(User $user)
+        {
+            $projects = $user->projects()->paginate(10);
+            return $projects->toResourceCollection()->response()->getData(true);
+        }
     public function storeOrUpdate(array $data, User $user, ?Project $project = null){
         $image = $data['image'] ?? null;
         unset($data['image']);
@@ -23,12 +29,13 @@ class ProjectService{
                 Storage::delete($project->file->path);
                 $project->file()->delete();
             }
-            $path = $image->store('projects');
+            $path = $image->store('projects', 'public');
             $project->file()->create([
                 'path' => $path,
                 'mime_type' => $image->getClientMimeType()
             ]);
         }
+        return ['uuid' => $project->uuid];
 
     }
 

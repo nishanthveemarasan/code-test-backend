@@ -26,6 +26,7 @@ class StoreSkillRequest extends FormRequest
     {
         return [
             'skills' => ['required', 'array'],
+            'skills.*.uuid' => ['nullable', 'uuid'],
             'skills.*.name' => ['required', 'string'],
             'skills.*.action' => [
                 'required', 

@@ -28,6 +28,7 @@ class UserService
                 'mime_type' => $image->getClientMimeType()
             ]);
         }
+        return ['uuid' => $profile->uuid];
     }
 
     public function storeMainPage(array $data, User $user)

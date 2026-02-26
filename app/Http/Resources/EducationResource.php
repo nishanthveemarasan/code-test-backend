@@ -18,10 +18,8 @@ class EducationResource extends JsonResource
             'uuid'        => $this->uuid,
             'course'     => $this->course,
             'institution'        => $this->institution,
-            'period'      => [
-                'from' => $this->from,
-                'to'   => $this->to,
-            ],
+            'from' => $this->from,
+            'to'   => $this->to,
             'description' => $this->description
         ];;
     }

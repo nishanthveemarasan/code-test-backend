@@ -23,6 +23,7 @@ class StoreProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'uuid'         => 'nullable|uuid',
             'first_name'   => 'required|string|max:255',
             'last_name'    => 'required|string|max:255',
             'biography'     => 'nullable|string',
@@ -36,7 +37,7 @@ class StoreProfileRequest extends FormRequest
             ],
             'phone' => 'nullable|string|max:20',
             'address'      => 'nullable|string|max:255',
-            'image'        => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
+            'image'        => 'required_if:uuid,null|image|mimes:jpeg,jpg,png|max:2048',
         ];
     }
 

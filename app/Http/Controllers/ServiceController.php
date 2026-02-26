@@ -15,6 +15,18 @@ class ServiceController extends Controller
     
     public function __construct(protected MyAreaService $service) {}
 
+    public function list()
+    {
+        Gate::authorize('viewAny', Service::class);
+        try {
+            $services = $this->service->list(auth()->user());
+            return ApiResponse::success("Services retrieved successfully", $services);
+        } catch (\Exception $e) {
+            Log::channel('exception')->error('Get Services Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
+            return ApiResponse::error("Failed to retrieve Services");
+        }
+    }
+
     public function store(StoreServiceRequest $request)
     {
         Gate::authorize('create', Service::class);
