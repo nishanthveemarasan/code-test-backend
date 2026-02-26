@@ -172,7 +172,7 @@ class ServiceFeatureTest extends TestCase
             ->create();
 
         $response = $this->deleteJson(
-            route('api.user.service.delete', $service->uuid)
+            route('api.user.service.destroy', $service->uuid)
         );
 
         $response->assertStatus(200);
@@ -193,7 +193,7 @@ class ServiceFeatureTest extends TestCase
             ->create();
 
         $response = $this->deleteJson(
-            route('api.user.service.delete', $service->uuid)
+            route('api.user.service.destroy', $service->uuid)
         );
 
         $response->assertStatus(403);

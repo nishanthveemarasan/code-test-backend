@@ -75,7 +75,7 @@ class ExperienceFeatureTest extends TestCase
                         ->create();
 
         $response = $this->deleteJson(
-            route('api.user.experience.delete', $experience->uuid)
+            route('api.user.experience.destroy', $experience->uuid)
         );
 
         $response->assertStatus(200);
@@ -129,7 +129,7 @@ class ExperienceFeatureTest extends TestCase
         Passport::actingAs($attacker);
 
         $response = $this->deleteJson(
-            route('api.user.experience.delete', $experience->uuid)
+            route('api.user.experience.destroy', $experience->uuid)
         );
 
         $response->assertStatus(403);

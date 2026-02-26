@@ -84,7 +84,7 @@ class TestimonialFeatureTest extends TestCase
         $testimonial = Testimonial::factory()->for($user)->create();
 
         $response = $this->deleteJson(
-            route('api.user.testimonial.delete', $testimonial->uuid)
+            route('api.user.testimonial.destroy', $testimonial->uuid)
         );
 
         $response->assertStatus(200);
@@ -104,7 +104,7 @@ class TestimonialFeatureTest extends TestCase
         $testimonial = Testimonial::factory()->for($user2)->create();
 
         $response = $this->deleteJson(
-            route('api.user.testimonial.delete', $testimonial->uuid)
+            route('api.user.testimonial.destroy', $testimonial->uuid)
         );
 
         $response->assertStatus(403);
