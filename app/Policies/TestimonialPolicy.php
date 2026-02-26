@@ -21,7 +21,7 @@ class TestimonialPolicy
      */
     public function view(User $user, Testimonial $testimonial): bool
     {
-        return false;
+        return $user->id === $testimonial->user_id;
     }
 
     /**

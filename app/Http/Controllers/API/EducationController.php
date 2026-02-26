@@ -15,7 +15,7 @@ class EducationController extends Controller
 {
     public function __construct(protected EducationService $service){}
 
-    public function list()
+    public function index()
     {
         Gate::authorize('viewAny', Education::class);
         try {
@@ -24,6 +24,17 @@ class EducationController extends Controller
         } catch (\Exception $e) {
             Log::channel('exception')->error('List Education Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
             return ApiResponse::error("Failed to retrieve Education list");
+        }
+    }
+
+    public function show(Education $education)
+    {
+        Gate::authorize('view', $education);
+        try {
+            return ApiResponse::success("Education retrieved successfully", $education->toResource());
+        } catch (\Exception $e) {
+            Log::channel('exception')->error('Get Education Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
+            return ApiResponse::error("Failed to retrieve Education");
         }
     }
     public function store(StoreEducationRequest $request)

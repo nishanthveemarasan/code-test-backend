@@ -15,7 +15,7 @@ class ExperienceController extends Controller
     public function __construct(protected ExperienceService $service) {}
 
     
-    public function list()
+    public function index()
     {
         Gate::authorize('viewAny', Experience::class);
         try {
@@ -26,10 +26,21 @@ class ExperienceController extends Controller
             return ApiResponse::error("Failed to retrieve Experiences");
         }
     }
+
+    public function show(Experience $experience)
+    {
+        Gate::authorize('view', $experience);
+        try {
+            return ApiResponse::success("Experience retrieved successfully", $experience->toResource());
+        } catch (\Exception $e) {
+            Log::channel('exception')->error('Get Experience Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
+            return ApiResponse::error("Failed to retrieve Experience");
+        }
+    }
     /**
      * Method store
      *
-     * @param StoreExperienceRequest $request [explicite description]
+     * @param StoreExperienceRequest $request
      *
      * @return void
      */
@@ -52,8 +63,8 @@ class ExperienceController extends Controller
     /**
      * Method update
      *
-     * @param StoreExperienceRequest $request [explicite description]
-     * @param Experience $experience [explicite description]
+     * @param StoreExperienceRequest $request
+     * @param Experience $experience
      *
      * @return void
      */
@@ -76,11 +87,11 @@ class ExperienceController extends Controller
     /**
      * Method delete
      *
-     * @param Experience $experience [explicite description]
+     * @param Experience $experience
      *
      * @return void
      */
-    public function delete(Experience $experience)
+    public function destroy(Experience $experience)
     {
         Gate::authorize('delete', $experience);
         try {

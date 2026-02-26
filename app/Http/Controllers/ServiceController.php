@@ -15,7 +15,7 @@ class ServiceController extends Controller
     
     public function __construct(protected MyAreaService $service) {}
 
-    public function list()
+    public function index()
     {
         Gate::authorize('viewAny', Service::class);
         try {
@@ -26,6 +26,17 @@ class ServiceController extends Controller
             return ApiResponse::error("Failed to retrieve Services");
         }
     }
+
+    public function show(Service $service)
+    {
+        Gate::authorize('view', $service);
+        try {
+            return ApiResponse::success("Service retrieved successfully", $service->toResource());
+        } catch (\Exception $e) {
+            Log::channel('exception')->error('Get Service Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
+            return ApiResponse::error("Failed to retrieve Service");
+        }
+    }   
 
     public function store(StoreServiceRequest $request)
     {
@@ -51,7 +62,7 @@ class ServiceController extends Controller
         }
     }
 
-    public function delete(Service $service)
+    public function destroy(Service $service)
     {
         Gate::authorize('delete', $service);
         try {

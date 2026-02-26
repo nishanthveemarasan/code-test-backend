@@ -16,7 +16,7 @@ class SkillController extends Controller
 {
     public function __construct(protected SkillService $service) {}
 
-    public function get()
+    public function index()
     {
         Gate::authorize('viewAny', Skill::class);
         try {

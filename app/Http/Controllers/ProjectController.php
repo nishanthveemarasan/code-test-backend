@@ -15,7 +15,7 @@ class ProjectController extends Controller
 {
     public function __construct(protected ProjectService $service) {}
 
-    public function list()
+    public function index()
     {
         Gate::authorize('viewAny', Project::class);
         try {
@@ -27,7 +27,18 @@ class ProjectController extends Controller
         }
     }
 
-    public function save(StoreProjectRequest $request, ?Project $project = null)
+    public function show(Project $project)
+    {
+        Gate::authorize('view', $project);
+        try {
+            return ApiResponse::success("Project retrieved successfully", $project->toResource());
+        } catch (\Exception $e) {
+            Log::channel('exception')->error('Get Project Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
+            return ApiResponse::error("Failed to retrieve Project");
+        }
+    }
+
+    public function store(StoreProjectRequest $request, ?Project $project = null)
     {
        if ($project) {
             Gate::authorize('update', $project);
@@ -47,7 +58,7 @@ class ProjectController extends Controller
         }
     }
 
-    public function delete(Project $project)
+    public function destroy(Project $project)
     {
         Gate::authorize('delete', $project);
         try {

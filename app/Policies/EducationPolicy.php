@@ -21,7 +21,7 @@ class EducationPolicy
      */
     public function view(User $user, Education $education): bool
     {
-        return false;
+        return $user->id === $education->user_id;
     }
 
     /**

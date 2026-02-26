@@ -21,7 +21,7 @@ class ExperiencePolicy
      */
     public function view(User $user, Experience $experience): bool
     {
-        return false;
+        return $user->id === $experience->user_id;
     }
 
     /**

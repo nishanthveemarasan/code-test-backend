@@ -14,7 +14,7 @@ class TestimonialController extends Controller
 {
     public function __construct(protected TestimonialService $service) {}
 
-    public function list()
+    public function index()
     {
         Gate::authorize('viewAny', Testimonial::class);
         try {
@@ -23,6 +23,17 @@ class TestimonialController extends Controller
         } catch (\Exception $e) {
             Log::channel('exception')->error('Get Testimonials Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
             return ApiResponse::error("Failed to retrieve Testimonials");
+        }
+    }
+
+    public function show(Testimonial $testimonial)
+    {
+        Gate::authorize('view', $testimonial);
+        try {
+            return ApiResponse::success("Testimonial retrieved successfully", $testimonial->toResource());
+        } catch (\Exception $e) {
+            Log::channel('exception')->error('Get Testimonial Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
+            return ApiResponse::error("Failed to retrieve Testimonial");
         }
     }
 
@@ -50,7 +61,7 @@ class TestimonialController extends Controller
         }
     }
 
-    public function delete(Testimonial $testimonial)
+    public function destroy(Testimonial $testimonial)
     {
         Gate::authorize('delete', $testimonial);
         try {
