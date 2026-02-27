@@ -19,7 +19,7 @@ class ServiceResource extends JsonResource
             'title' => $this->title,
             'description' => $this->whenNotNull($this->description),
             'points' => $this->whenNotNull($this->points),
-            'special_point' => $this->special_point,
+            'special_point' => $this->whenNotNull($this->special_point)
         ];
     }
 }

@@ -31,13 +31,7 @@ class Experience extends Model
         });
     }
 
-    protected function to(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value ? $value: 'Present'
-        );
-    }
-
+    
     public function getRouteKeyName(): string
     {
         return 'uuid';
@@ -46,5 +40,13 @@ class Experience extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    protected function casts()
+    {
+        return [
+            'from' => 'integer',
+            'to' => 'integer',
+        ];
     }
 }

@@ -19,7 +19,7 @@ class ExperienceResource extends JsonResource
             'company'     => $this->company,
             'role'        => $this->role,
             'from' => $this->from,
-            'to'   => $this->to,
+            'to'   => $this->to ?? 'Present',
             'description' => $this->description
         ];
     }

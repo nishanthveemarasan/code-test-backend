@@ -19,7 +19,7 @@ class EducationResource extends JsonResource
             'course'     => $this->course,
             'institution'        => $this->institution,
             'from' => $this->from,
-            'to'   => $this->to,
+            'to'   => $this->to ?? 'Present',
             'description' => $this->description
         ];;
     }

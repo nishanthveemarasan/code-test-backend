@@ -32,12 +32,6 @@ class Education extends Model
         });
     }
 
-    protected function to(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value ? $value: 'Present'
-        );
-    }
 
     public function user()
     {
@@ -47,5 +41,13 @@ class Education extends Model
     public function getRouteKeyName(): string
     {
         return 'uuid';
+    }
+
+    protected function casts()
+    {
+        return [
+            'from' => 'integer',
+            'to' => 'integer',
+        ];
     }
 }

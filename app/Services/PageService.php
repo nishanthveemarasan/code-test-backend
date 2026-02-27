@@ -11,6 +11,7 @@ use App\Models\Project;
 use App\Models\Service;
 use App\Models\Skill;
 use App\Models\Testimonial;
+use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 
 class PageService
@@ -43,8 +44,9 @@ class PageService
 
     public function contactUsPage()
     {
-        $testimonials = Profile::select('email', 'phone', 'address')->get();
-        return $testimonials->toResourceCollection();
+        $contact = Profile::select('email', 'phone', 'address')
+                    ->where('user_id',config('admin.owner.id'))->first();
+        return $contact->toResource();
     }
 
     public function AboutPage()
