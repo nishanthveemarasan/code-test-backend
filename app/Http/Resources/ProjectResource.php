@@ -15,11 +15,11 @@ class ProjectResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'uuid' => $this->uuid,
+            'uuid' => $this->whenNotNull($this->uuid),
             'name' => $this->name,
             'type' => $this->type,
             'city' => $this->city,
-            'image' => new FileResource($this->whenLoaded('file')),
+            'image' => $this->when($this->id, new FileResource($this->whenLoaded('file'))),
         ];
     }
 }

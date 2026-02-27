@@ -15,7 +15,7 @@ class ExperienceResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'uuid'        => $this->uuid,
+            'uuid'        => $this->whenNotNull($this->uuid),
             'company'     => $this->company,
             'role'        => $this->role,
             'from' => $this->from,

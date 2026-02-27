@@ -23,9 +23,9 @@ class VerifySingatureMiddleware
         if (!$signature || !$timestamp) {
             return ApiResponse::error("Missing Headers", null, 401);
         }
-        // if (abs(time() - ($timestamp / 1000)) > 300) {
-        //     return response()->json(['message' => 'Request expired.'], 403);
-        // }
+        if (abs(time() - ($timestamp / 1000)) > 300) {
+            return response()->json(['message' => 'Request expired.'], 403);
+        }
 
         $method = strtoupper($request->method());
         $path = $request->path(); 

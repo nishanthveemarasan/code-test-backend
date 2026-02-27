@@ -15,7 +15,7 @@ class FileResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'uuid' => $this->uuid,
+            'uuid' => $this->whenNotNull($this->uuid),
             'full_url' => $this->whenNotNull($this->full_url),
             'title' => $this->whenNotNull($this->title),
             'order' => $this->whenNotNull($this->order),

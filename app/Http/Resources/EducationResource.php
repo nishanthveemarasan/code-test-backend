@@ -15,7 +15,7 @@ class EducationResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'uuid'        => $this->uuid,
+            'uuid'        => $this->whenNotNull($this->uuid),
             'course'     => $this->course,
             'institution'        => $this->institution,
             'from' => $this->from,

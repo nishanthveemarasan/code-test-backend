@@ -22,7 +22,7 @@ class UserService
                 Storage::delete($profile->file->path);
                 $profile->file()->delete();
             }
-            $path = $image->store('profiles','public');
+            $path = $image->store('profiles', 'public');
             $profile->file()->create([
                 'path' => $path,
                 'mime_type' => $image->getClientMimeType()
@@ -41,7 +41,7 @@ class UserService
             ]
         );
 
-        if (isset($data['images'])) {
+        // if (isset($data['images'])) {
             foreach ($data['images'] as $imageData) {
                 $action = SkillAction::tryFrom($imageData['action']);
                 switch ($action) {
@@ -54,6 +54,17 @@ class UserService
                                 'title' => $imageData['title'] ?? null,
                                 'order' => $imageData['order'] ?? null,
                             ]);
+                        }
+                        break;
+                    case SkillAction::UPDATE:
+                        if (isset($imageData['uuid'])) {
+                            $file = $mainPage->files()->where('uuid', $imageData['uuid'])->first();
+                            if ($file) {
+                                $file->update([
+                                    'title' => $imageData['title'] ?? $file->title,
+                                    'order' => $imageData['order'] ?? $file->order,
+                                ]);
+                            }
                         }
                         break;
                     case SkillAction::DELETE:
@@ -69,7 +80,7 @@ class UserService
                         break;
                 }
             }
-        }
+        // }
     }
 
     public function getData(User $user)
@@ -77,7 +88,7 @@ class UserService
         $mainPage = $user->mainPage()->with(['files' => function ($query) {
             $query->orderBy('order', 'asc');
         }])->first();
-        return $mainPage ? $mainPage->toResource(): null;
+        return $mainPage ? $mainPage->toResource() : null;
     }
 
     public function getProfileData(User $user)

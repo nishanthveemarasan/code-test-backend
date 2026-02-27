@@ -25,7 +25,7 @@ class ProjectService{
         $project->refresh();
 
         if ($image) {
-            if ($project->image) {
+            if ($project->file) {
                 Storage::delete($project->file->path);
                 $project->file()->delete();
             }

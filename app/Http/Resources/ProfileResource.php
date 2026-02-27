@@ -16,14 +16,14 @@ class ProfileResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'uuid' => $this->uuid,
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
-            'email' => $this->email,
-            'phone' => $this->phone,
-            'address' => $this->address,
-            'biography' => $this->biography,
-            'bottom_line' => $this->bottom_line,
+            'uuid' => $this->whenNotNull($this->uuid),
+            'first_name' => $this->whenNotNull($this->first_name),
+            'last_name' => $this->whenNotNull($this->last_name),
+            'email' => $this->whenNotNull($this->email),
+            'phone' => $this->whenNotNull($this->phone),
+            'address' => $this->whenNotNull($this->address),
+            'biography' => $this->whenNotNull($this->biography),
+            'bottom_line' => $this->whenNotNull($this->bottom_line),
             'image' => new FileResource($this->whenLoaded('file')),
         ];
     }

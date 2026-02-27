@@ -27,11 +27,11 @@ class StoreMainPageRequest extends FormRequest
             'title' => ['nullable','string','max:255'],
             'description' => ['nullable','string'],
             'images' => ['nullable','array'],
-            'images.*.file' => ['required_if:images.*.action,add','image','mimes:jpeg,jpg,png','max:4096'],
+            'images.*.file' => ['required_if:images.*.action,add','nullable','image','mimes:jpeg,jpg,png','max:4096'],
             'images.*.title' => ['nullable','string','max:255'],
             'images.*.action' => ['required', Rule::enum(SkillAction::class)],
             'images.*.order' => ['nullable','integer'],
-            'images.*.uuid'   => ['required_if:images.*.action,delete','uuid']
+            'images.*.uuid' => ['required_if:images.*.action,update,delete','nullable','uuid']
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -28,6 +29,13 @@ class Experience extends Model
                 $experience->uuid = (string) Str::uuid();
             }
         });
+    }
+
+    protected function to(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? $value: 'Present'
+        );
     }
 
     public function getRouteKeyName(): string

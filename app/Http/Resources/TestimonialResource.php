@@ -15,7 +15,7 @@ class TestimonialResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'uuid' => $this->uuid,
+            'uuid' => $this->whenNotNull($this->uuid),
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'star' => $this->star,

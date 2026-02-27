@@ -15,10 +15,10 @@ class ServiceResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'uuid' => $this->uuid,
+            'uuid' => $this->whenNotNull($this->uuid),
             'title' => $this->title,
-            'description' => $this->description,
-            'points' => $this->points,
+            'description' => $this->whenNotNull($this->description),
+            'points' => $this->whenNotNull($this->points),
             'special_point' => $this->special_point,
         ];
     }
