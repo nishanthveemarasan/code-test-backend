@@ -21,16 +21,16 @@ class UserService
         );
 
         if ($image) {
-           UpdateProfileImageEvent::dispatch($profile, $image);
-            // if ($profile->image) {
-            //     Storage::delete($profile->file->path);
-            //     $profile->file()->delete();
-            // }
-            // $path = $image->store('profiles', 'public');
-            // $profile->file()->create([
-            //     'path' => $path,
-            //     'mime_type' => $image->getClientMimeType()
-            // ]);
+            //    UpdateProfileImageEvent::dispatch($profile, $image);
+            if ($profile->image) {
+                Storage::delete($profile->file->path);
+                $profile->file()->delete();
+            }
+            $path = $image->store('profiles', 'public');
+            $profile->file()->create([
+                'path' => $path,
+                'mime_type' => $image->getClientMimeType()
+            ]);
         }
         return ['uuid' => $profile->uuid];
     }
@@ -46,43 +46,55 @@ class UserService
         );
 
         // if (isset($data['images'])) {
-            foreach ($data['images'] as $imageData) {
-                $action = SkillAction::tryFrom($imageData['action']);
-                switch ($action) {
-                    case SkillAction::ADD:
-                        if (isset($imageData['file'])) {
-                            $file = $mainPage->files()->create([
-                                'path' => '',
-                                'mime_type' => $imageData['file']->getClientMimeType(),
-                                'title' => $imageData['title'] ?? null,
-                                'order' => $imageData['order'] ?? null,
+        foreach ($data['images'] as $imageData) {
+            $action = SkillAction::tryFrom($imageData['action']);
+            switch ($action) {
+                case SkillAction::ADD:
+                    if (isset($imageData['file'])) {
+                        $path = $imageData['file']->store('main_page_images', 'public');
+                        $mainPage->files()->create([
+                            'path' => $path,
+                            'mime_type' => $imageData['file']->getClientMimeType(),
+                            'title' => $imageData['title'] ?? null,
+                            'order' => $imageData['order'] ?? null,
+                        ]);
+                        // $file = $mainPage->files()->create([
+                        //     'path' => '',
+                        //     'mime_type' => $imageData['file']->getClientMimeType(),
+                        //     'title' => $imageData['title'] ?? null,
+                        //     'order' => $imageData['order'] ?? null,
+                        // ]);
+                        // AddMainPageImageEvent::dispatch($file, $imageData['file']);
+                    }
+                    break;
+                case SkillAction::UPDATE:
+                    if (isset($imageData['uuid'])) {
+                        $file = $mainPage->files()->where('uuid', $imageData['uuid'])->first();
+                        if ($file) {
+                            $file->update([
+                                'title' => $imageData['title'] ?? $file->title,
+                                'order' => $imageData['order'] ?? $file->order,
                             ]);
-                            AddMainPageImageEvent::dispatch($file, $imageData['file']);
                         }
-                        break;
-                    case SkillAction::UPDATE:
-                        if (isset($imageData['uuid'])) {
-                            $file = $mainPage->files()->where('uuid', $imageData['uuid'])->first();
-                            if ($file) {
-                                $file->update([
-                                    'title' => $imageData['title'] ?? $file->title,
-                                    'order' => $imageData['order'] ?? $file->order,
-                                ]);
-                            }
+                    }
+                    break;
+                case SkillAction::DELETE:
+                    if (isset($imageData['uuid'])) {
+                        // $file = $mainPage->files()->where('uuid', $imageData['uuid'])->first();
+                        // if ($file) {
+                        //     DeleteMainPageImageEvent::dispatch($file);
+                        // }
+                        $file = $mainPage->files()->where('uuid', $imageData['uuid'])->first();
+                        if ($file) {
+                            Storage::delete($file->path);
+                            $file->delete();
                         }
-                        break;
-                    case SkillAction::DELETE:
-                        if (isset($imageData['uuid'])) {
-                            $file = $mainPage->files()->where('uuid', $imageData['uuid'])->first();
-                            if ($file) {
-                                DeleteMainPageImageEvent::dispatch($file);
-                            }
-                        }
-                        break;
-                    default:
-                        break;
-                }
+                    }
+                    break;
+                default:
+                    break;
             }
+        }
         // }
     }
 

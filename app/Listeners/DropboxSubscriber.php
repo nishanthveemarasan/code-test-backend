@@ -69,7 +69,6 @@ class DropboxSubscriber
 
     private function processDropboxImageUpload($model, $imageFile, string $folderPath, bool $deleteAction = false, bool $hasRelation = true): void
     {
-        $this->dropbboxService->connectDropbox('store_images');
         if (!Storage::disk('dropbox')->exists($folderPath)) {
             Storage::disk('dropbox')->makeDirectory($folderPath);
         }

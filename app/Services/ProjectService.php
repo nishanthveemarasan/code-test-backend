@@ -29,7 +29,16 @@ class ProjectService
         $project->refresh();
 
         if ($image) {
-            UpdateProjectImageEvent::dispatch($project, $image);
+            // UpdateProjectImageEvent::dispatch($project, $image);
+            if ($project->file) {
+                Storage::delete($project->file->path);
+                $project->file()->delete();
+            }
+            $path = $image->store('projects', 'public');
+            $project->file()->create([
+                'path' => $path,
+                'mime_type' => $image->getClientMimeType()
+            ]);
         }
         return ['uuid' => $project->uuid];
     }
@@ -37,7 +46,9 @@ class ProjectService
     public function delete(Project $project): void
     {
         if ($project->file) {
-            DeleteProjectImageEvent::dispatch($project);
+            // DeleteProjectImageEvent::dispatch($project);
+            Storage::delete($project->file->path);
+            $project->file()->delete();
         }
 
         $project->delete();

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\DropboxService;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -39,5 +40,8 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('contact_form', function (Request $request) {
             return Limit::perMinute(5)->by($request->ip());
         });
+
+        $dropboxService = new DropboxService();
+        $dropboxService->connectDropbox('store_images');
     }
 }
