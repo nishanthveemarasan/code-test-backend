@@ -19,7 +19,7 @@ class ProjectResource extends JsonResource
             'name' => $this->name,
             'type' => $this->type,
             'city' => $this->city,
-            'image' => $this->when($this->id, new FileResource($this->whenLoaded('file'))),
+            'image' => new FileResource($this->whenLoaded('file')),
         ];
     }
 }

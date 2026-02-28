@@ -58,6 +58,11 @@ class User extends Authenticatable
         return $this->hasMany(Experience::class);
     }
 
+    public function firstExperience()
+    {
+       return $this->hasOne(Experience::class)->oldestOfMany();
+    }
+
     public function educations()
     {
         return $this->hasMany(Education::class);
@@ -87,4 +92,5 @@ class User extends Authenticatable
     {
         return $this->hasOne(MainPage::class);
     }
+
 }
