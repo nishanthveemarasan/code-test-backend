@@ -2,18 +2,22 @@
 
 namespace App\Services;
 
+use App\Events\DeleteProjectImageEvent;
+use App\Events\UpdateProjectImageEvent;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 
-class ProjectService{
+class ProjectService
+{
 
-        public function list(User $user)
-        {
-            $projects = $user->projects()->paginate(10);
-            return $projects->toResourceCollection()->response()->getData(true);
-        }
-    public function storeOrUpdate(array $data, User $user, ?Project $project = null){
+    public function list(User $user)
+    {
+        $projects = $user->projects()->paginate(10);
+        return $projects->toResourceCollection()->response()->getData(true);
+    }
+    public function storeOrUpdate(array $data, User $user, ?Project $project = null)
+    {
         $image = $data['image'] ?? null;
         unset($data['image']);
         if ($project) {
@@ -25,25 +29,15 @@ class ProjectService{
         $project->refresh();
 
         if ($image) {
-            if ($project->file) {
-                Storage::delete($project->file->path);
-                $project->file()->delete();
-            }
-            $path = $image->store('projects', 'public');
-            $project->file()->create([
-                'path' => $path,
-                'mime_type' => $image->getClientMimeType()
-            ]);
+            UpdateProjectImageEvent::dispatch($project, $image);
         }
         return ['uuid' => $project->uuid];
-
     }
 
     public function delete(Project $project): void
     {
         if ($project->file) {
-            Storage::delete($project->file->path);
-            $project->file()->delete();
+            DeleteProjectImageEvent::dispatch($project);
         }
 
         $project->delete();

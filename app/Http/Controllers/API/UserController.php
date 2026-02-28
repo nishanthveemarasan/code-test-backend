@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Exceptions\DropboxUploadException;
 use App\Helper\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMainPageRequest;
@@ -44,7 +45,12 @@ class UserController extends Controller
             $response = $this->userService->storeMainPage($request->validated(), auth()->user());
             DB::commit();
             return ApiResponse::success("Main page info saved successfully");
-        } catch (\Exception $e) {
+        } catch (DropboxUploadException $e) {
+            DB::rollBack();
+            Log::channel('exception')->error('Dropbox upload failed: ' . $e->getMessage());
+            return ApiResponse::error("Failed to save Main page info");
+        }
+        catch (\Exception $e) {
             DB::rollBack();
             Log::channel('exception')->error('Update Main Page failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
             return ApiResponse::error("Failed to save Main page info");

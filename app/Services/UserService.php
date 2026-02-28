@@ -3,7 +3,8 @@
 namespace App\Services;
 
 use App\Enums\SkillAction;
-
+use App\Events\AddMainPageImageEvent;
+use App\Events\DeleteMainPageImageEvent;
 use App\Events\UpdateProfileImageEvent;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
@@ -50,13 +51,13 @@ class UserService
                 switch ($action) {
                     case SkillAction::ADD:
                         if (isset($imageData['file'])) {
-                            $path = $imageData['file']->store('main_page_images', 'public');
-                            $mainPage->files()->create([
-                                'path' => $path,
+                            $file = $mainPage->files()->create([
+                                'path' => '',
                                 'mime_type' => $imageData['file']->getClientMimeType(),
                                 'title' => $imageData['title'] ?? null,
                                 'order' => $imageData['order'] ?? null,
                             ]);
+                            AddMainPageImageEvent::dispatch($file, $imageData['file']);
                         }
                         break;
                     case SkillAction::UPDATE:
@@ -74,8 +75,7 @@ class UserService
                         if (isset($imageData['uuid'])) {
                             $file = $mainPage->files()->where('uuid', $imageData['uuid'])->first();
                             if ($file) {
-                                Storage::delete($file->path);
-                                $file->delete();
+                                DeleteMainPageImageEvent::dispatch($file);
                             }
                         }
                         break;
