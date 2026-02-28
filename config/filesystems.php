@@ -37,7 +37,9 @@ return [
             'throw' => false,
             'report' => false,
         ],
-
+        'dropbox' => [
+            'driver' => 'dropbox',
+        ],
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

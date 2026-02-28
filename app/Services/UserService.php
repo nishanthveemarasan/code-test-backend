@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Enums\SkillAction;
+
+use App\Events\UpdateProfileImageEvent;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 
@@ -18,15 +20,16 @@ class UserService
         );
 
         if ($image) {
-            if ($profile->image) {
-                Storage::delete($profile->file->path);
-                $profile->file()->delete();
-            }
-            $path = $image->store('profiles', 'public');
-            $profile->file()->create([
-                'path' => $path,
-                'mime_type' => $image->getClientMimeType()
-            ]);
+           UpdateProfileImageEvent::dispatch($profile, $image);
+            // if ($profile->image) {
+            //     Storage::delete($profile->file->path);
+            //     $profile->file()->delete();
+            // }
+            // $path = $image->store('profiles', 'public');
+            // $profile->file()->create([
+            //     'path' => $path,
+            //     'mime_type' => $image->getClientMimeType()
+            // ]);
         }
         return ['uuid' => $profile->uuid];
     }
