@@ -14,9 +14,10 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->create([
-            'name' => 'Admin User',
+        User::firstOrCreate([
             'email' => 'admin@crm.com',
+        ], [
+            'name' => 'Admin User',
             'username' => 'adminuser',
             'password' => Hash::make('password')
         ]);
