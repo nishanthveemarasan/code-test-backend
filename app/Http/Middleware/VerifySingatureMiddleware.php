@@ -3,12 +3,14 @@
 namespace App\Http\Middleware;
 
 use App\Helper\ApiResponse;
+use App\Traits\SignatureTrait;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class VerifySingatureMiddleware
 {
+    use SignatureTrait;
     /**
      * Handle an incoming request.
      *
@@ -17,20 +19,18 @@ class VerifySingatureMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         $signature = $request->header('X-Signature');
-        $timestamp = $request->header('X-Timestamp');
-        $secret = config('admin.keys.service');
-
-        if (!$signature || !$timestamp) {
+        $randomString = $request->header('X-Randomstring');
+  
+        if (!$signature || !$randomString) {
             return ApiResponse::error("Missing Headers", null, 401);
         }
-        if (abs(time() - ($timestamp / 1000)) > 300) {
+        if (abs(time() - ($randomString / 1000)) > 300) {
             return response()->json(['message' => 'Request expired.'], 403);
         }
 
         $method = strtoupper($request->method());
         $path = $request->path(); 
-        $dataToHash = $method . $path . $timestamp;
-        $computedSignature = hash_hmac('sha256', $dataToHash, $secret);
+        $computedSignature = $this->getSignatureAdata($method, $path, $randomString);
         if (!hash_equals($computedSignature, (string)$signature)) {
             return ApiResponse::error("Invalid Signature", null, 403);
         }
