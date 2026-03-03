@@ -20,6 +20,7 @@ class ProfileResource extends JsonResource
             'first_name' => $this->whenNotNull($this->first_name),
             'last_name' => $this->whenNotNull($this->last_name),
             'email' => $this->whenNotNull($this->email),
+            'qualification' => $this->whenNotNull($this->qualification),
             'phone' => $this->whenNotNull($this->phone),
             'address' => $this->whenNotNull($this->address),
             'biography' => $this->whenNotNull($this->biography),

@@ -27,6 +27,7 @@ class StoreProfileRequest extends FormRequest
             'first_name'   => 'required|string|max:255',
             'last_name'    => 'required|string|max:255',
             'biography'     => 'nullable|string',
+            'qualification' => 'required|string|max:100',
             'bottom_line'  => 'nullable|string',
             'email'        => [
                 'required',

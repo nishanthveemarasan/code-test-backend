@@ -38,7 +38,7 @@ class File extends Model
             get: function () {
 
                 if(Str::startsWith($this->mime_type, 'image')) {
-                    return config('app.url').Storage::url($this->path);
+                    return Storage::disk('public')->url($this->path);
                 }
                 return null;
             },
