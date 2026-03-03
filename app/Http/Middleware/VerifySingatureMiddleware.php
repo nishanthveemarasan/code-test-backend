@@ -22,7 +22,7 @@ class VerifySingatureMiddleware
         $randomString = $request->header('X-Randomstring');
   
         if (!$signature || !$randomString) {
-            return ApiResponse::error("Missing Headers", null, 401);
+            return ApiResponse::error("You dont have permission to access", null, 401);
         }
         if (abs(time() - ($randomString / 1000)) > 300) {
             return response()->json(['message' => 'Request expired.'], 403);
@@ -32,7 +32,7 @@ class VerifySingatureMiddleware
         $path = $request->path(); 
         $computedSignature = $this->getSignatureAdata($method, $path, $randomString);
         if (!hash_equals($computedSignature, (string)$signature)) {
-            return ApiResponse::error("Invalid Signature", null, 403);
+            return ApiResponse::error("You dont have permission to access", null, 403);
         }
         return $next($request);
     }
