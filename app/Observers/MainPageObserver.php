@@ -4,8 +4,9 @@ namespace App\Observers;
 
 use App\Models\MainPage;
 use App\Traits\CacheTrait;
+use Illuminate\Contracts\Events\ShouldHandleEventsAfterCommit;
 
-class MainPageObserver
+class MainPageObserver implements ShouldHandleEventsAfterCommit
 {
     use CacheTrait;
     /**

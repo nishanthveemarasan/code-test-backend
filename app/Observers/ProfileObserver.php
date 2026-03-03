@@ -4,8 +4,9 @@ namespace App\Observers;
 
 use App\Models\Profile;
 use App\Traits\CacheTrait;
+use Illuminate\Contracts\Events\ShouldHandleEventsAfterCommit;
 
-class ProfileObserver
+class ProfileObserver implements ShouldHandleEventsAfterCommit
 {
     use CacheTrait;
     /**
@@ -13,7 +14,7 @@ class ProfileObserver
      */
     public function created(Profile $profile): void
     {
-        $this->forgetCaches(['home_page_data']);
+        $this->forgetCaches(['home_page_data','about_page_data']);
     }
 
     /**
@@ -21,7 +22,7 @@ class ProfileObserver
      */
     public function updated(Profile $profile): void
     {
-        $this->forgetCaches(['home_page_data']);
+        $this->forgetCaches(['home_page_data','about_page_data']);
     }
 
     /**
@@ -29,7 +30,7 @@ class ProfileObserver
      */
     public function deleted(Profile $profile): void
     {
-        $this->forgetCaches(['home_page_data']);
+        $this->forgetCaches(['home_page_data','about_page_data']);
     }
 
     /**

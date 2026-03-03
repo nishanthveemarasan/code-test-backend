@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Observers\ExperienceObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
-
+#[ObservedBy([ExperienceObserver::class])]
 class Experience extends Model
 {
     /** @use HasFactory<\Database\Factories\ExperienceFactory> */

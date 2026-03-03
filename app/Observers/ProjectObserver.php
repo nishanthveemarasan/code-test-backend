@@ -4,8 +4,9 @@ namespace App\Observers;
 
 use App\Models\Project;
 use App\Traits\CacheTrait;
+use Illuminate\Contracts\Events\ShouldHandleEventsAfterCommit;
 
-class ProjectObserver
+class ProjectObserver implements ShouldHandleEventsAfterCommit
 {
     use CacheTrait;
     /**
