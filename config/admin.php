@@ -7,6 +7,7 @@ return [
     'owner' => [
         'email' => env('OWNER_EMAIL'),
         'id' => env('APP_USER'),
+        'test_email' => env('TEST_EMAIL'),
         
     ],
     'keys' => [

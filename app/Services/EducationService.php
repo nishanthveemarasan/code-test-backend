@@ -12,7 +12,7 @@ class EducationService
     
     public function list(User $user)
     {
-        $paginateList = $user->educations()->orderBy('from', 'asc')->paginate(10);
+        $paginateList = $user->educations()->orderBy('from', 'desc')->paginate(10);
         return EducationResource::collection($paginateList)->response()
             ->getData(true);
     }

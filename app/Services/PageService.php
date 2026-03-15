@@ -2,14 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Education;
-use App\Models\Experience;
-use App\Models\MainPage;
-use App\Models\Profile;
-use App\Models\Project;
-use App\Models\Service;
-use App\Models\Skill;
-use App\Models\Testimonial;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 
@@ -17,9 +9,10 @@ class PageService
 {
     public function homePageData()
     {
-        return Cache::remember('home_page_data', now()->addHours(6), function () {
+       // return Cache::remember('home_page_data', now()->addHours(6), function () {
             $user = User::with([
                 'services:user_id,title,description',
+                'profile:user_id,email,phone,address',
                 'projects' => function ($query) {
                     $query->select('id', 'user_id', 'name', 'type', 'city')
                         ->with(['file:id,fileable_id,fileable_type,path,mime_type']);
@@ -34,25 +27,36 @@ class PageService
                 'services' => $user->services->toResourceCollection(),
                 'content' => $user->mainPage->toResource(),
                 'projects' => $user->projects->toResourceCollection(),
-                'year_of_experience' => $this->getExperinceYear($user)
+                'year_of_experience' => $this->getExperinceYear($user),
+                'contact_info' => $user->profile->toResource()
             ];
-        });
+      //  });
     }
 
     public function servicesPageData()
     {
-        $user = User::with('services:user_id,title,special_point,points,description')
+        $user = User::with([
+            'services:user_id,title,special_point,points,description',
+            'profile:user_id,email,phone,address',
+            ])
             ->find(config('admin.owner.id'));
         return [
             'services' => $user->services->toResourceCollection(),
-            'year_of_experience' => $this->getExperinceYear($user)
+            'year_of_experience' => $this->getExperinceYear($user),
+            'contact_info' => $user->profile->toResource()
         ];
     }
 
     public function testimonialPageData()
     {
-        $user = User::with('testimonials:user_id,first_name,last_name,star,title,content')->find(config('admin.owner.id'));
-        return $user->testimonials->toResourceCollection();
+        $user = User::with([
+            'testimonials:user_id,first_name,last_name,star,title,content',
+            'profile:user_id,email,phone,address'
+            ])->find(config('admin.owner.id'));
+        return [
+            'testimonials' => $user->testimonials->toResourceCollection(),
+            'contact_info' => $user->profile->toResource()
+        ];
     }
 
     public function contactUsPage()
@@ -63,13 +67,19 @@ class PageService
 
     public function AboutPage()
     {
-        return Cache::remember('about_page_data', now()->addHours(6), function () {
+        // return Cache::remember('about_page_data', now()->addHours(6), function () {
             $user = User::with([
                 'services:user_id,title,special_point',
-                'experiences:user_id,company,role,from,to,description',
-                'educations:user_id,course,from,to,institution,description',
+                'experiences' => function ($query) {
+                    $query->select('user_id', 'company', 'role', 'from', 'to', 'description')
+                          ->orderBy('from', 'desc');
+                },
+                'educations' => function ($query) {
+                    $query->select('user_id', 'course', 'from', 'to', 'institution', 'description')
+                          ->orderBy('from', 'desc');
+                },
                 'skills:user_id,name',
-                'profile:user_id,first_name,last_name,id,biography,bottom_line'
+                'profile:user_id,first_name,last_name,id,biography,bottom_line,email,phone,address'
             ])->find(config('admin.owner.id'));
             return [
                 'services' => $user->services->toResourceCollection(),
@@ -79,7 +89,7 @@ class PageService
                 'profile' => $user->profile->toResource(),
                 'year_of_experience' => $this->getExperinceYear($user)
             ];
-        });
+        // });
     }
 
     private function getExperinceYear(User $user)

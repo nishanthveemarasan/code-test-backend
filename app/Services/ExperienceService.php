@@ -11,7 +11,7 @@ class ExperienceService
 
     public function list(User $user)
     {
-        $paginateList = $user->experiences()->orderBy('from', 'asc')->paginate(10);
+        $paginateList = $user->experiences()->orderBy('from', 'desc')->paginate(10);
         return ExperienceResource::collection($paginateList)->response()
             ->getData(true);
     }

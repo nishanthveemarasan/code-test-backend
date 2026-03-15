@@ -32,6 +32,7 @@ class ContactUsSubscriber implements ShouldQueue
      */
     public function handleNotifyUser(NotifyUserEvent $event): void
     {
+        Log::info('Preparing to send auto-response email to user', ['user_email' => $event->contactUs->email]);
         Mail::to($event->contactUs->email)->send(new SendNotifyUserEmail($event->contactUs));
     }
     

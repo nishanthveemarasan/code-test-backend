@@ -7,10 +7,12 @@ use App\Events\AddMainPageImageEvent;
 use App\Events\DeleteMainPageImageEvent;
 use App\Events\UpdateProfileImageEvent;
 use App\Models\User;
+use App\Traits\CacheTrait;
 use Illuminate\Support\Facades\Storage;
 
 class UserService
 {
+    use CacheTrait;
     public function store(array $data, User $user)
     {
         $image = $data['image'] ?? null;
@@ -32,6 +34,7 @@ class UserService
                 'mime_type' => $image->getClientMimeType()
             ]);
         }
+        $this->forgetCaches(['home_page_data','about_page_data']);
         return ['uuid' => $profile->uuid];
     }
 
@@ -95,6 +98,7 @@ class UserService
                     break;
             }
         }
+        $this->forgetCaches(['home_page_data','about_page_data']);
         // }
     }
 
