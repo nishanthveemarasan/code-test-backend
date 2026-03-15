@@ -31,7 +31,7 @@ A sophisticated, high-performance RESTful API built with **Laravel 12**. This ba
 * **Framework:** Laravel 12 (PHP 8.3+)
 * **Authentication:** Laravel Passport
 * **Database:** MySQL
-* **Testing:** PHPUnit / Pest
+* **Testing:** PHPUnit
 * **Storage:** Dropbox API
 
 ---
