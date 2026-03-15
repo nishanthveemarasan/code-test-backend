@@ -7,7 +7,7 @@ A sophisticated, high-performance RESTful API built with **Laravel 12**. This ba
 ## 🛠️ Advanced Technical Implementation
 
 ### 🔐 Security & Authentication (OAuth2)
-* **Laravel Passport:** Implemented full OAuth2 server capabilities to issue access tokens, handle refresh tokens, and manage secure API authentication.
+* **Laravel Passport:** Implemented to issue access tokens, handle refresh tokens, and manage secure API authentication.
 * **Granular Authorization:** Utilized **Policies** and **Gates** to ensure users can only interact with authorized resources.
 * **Data Integrity:** Used **Middleware** and **Form Requests** to validate all incoming data and sanitize inputs.
 
