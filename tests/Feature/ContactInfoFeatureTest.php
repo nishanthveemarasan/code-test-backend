@@ -14,8 +14,7 @@ class ContactInfoFeatureTest extends TestCase
     
     public function test_authenticated_user_can_store_contact_info()
     {
-        $user = User::factory()->create();
-        Passport::actingAs($user);
+        $user = $this->authenticateUser();
 
         $faker = Faker::create();
 
@@ -40,8 +39,7 @@ class ContactInfoFeatureTest extends TestCase
 
     public function test_invalid_data_returns_validation_error()
     {
-        $user = User::factory()->create();
-        Passport::actingAs($user);
+        $user = $this->authenticateUser();
 
         $response = $this->postJson(
             route('api.user.contact-info'),

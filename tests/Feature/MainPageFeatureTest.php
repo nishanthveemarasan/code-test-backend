@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
@@ -25,8 +26,7 @@ class MainPageFeatureTest extends TestCase
     public function test_user_can_create_a_main_page_with_multiple_images()
     {
         
-        $user = User::factory()->create();
-        Passport::actingAs($user);
+        $user = $this->authenticateUser();
 
         
         $payload = [
@@ -61,18 +61,17 @@ class MainPageFeatureTest extends TestCase
     public function test_user_can_delete_an_existing_image_from_main_page()
     {
         
-        $user = User::factory()->create();
-        Passport::actingAs($user);
+        $user = $this->authenticateUser();
 
         
         $mainPage = MainPage::factory()->create(['user_id' => $user->id]);
         $fileToKeep = $mainPage->files()->create([
-            'uuid' => \Illuminate\Support\Str::uuid(),
+            'uuid' => Str::uuid(),
             'path' => 'main_pages/keep.jpg',
             'title' => 'Staying'
         ]);
         $fileToDelete = $mainPage->files()->create([
-            'uuid' => \Illuminate\Support\Str::uuid(),
+            'uuid' => Str::uuid(),
             'path' => 'main_pages/delete-me.jpg',
             'title' => 'Going'
         ]);
@@ -103,13 +102,13 @@ class MainPageFeatureTest extends TestCase
     public function test_unauthorized_user_cannot_modify_other_users_main_page()
     {
         $owner = User::factory()->create();
-        $intruder = User::factory()->create();
+        $loggedUser = $this->authenticateUser();
 
-        $mainPage = MainPage::factory()->create([
+        MainPage::factory()->create([
             'user_id' => $owner->id,
         ]);
 
-        $response = $this->actingAs($intruder)->postJson('/api/main-page', [
+        $response = $this->postJson('/api/main-page', [
             '_method' => 'PATCH',
             'image_0_action' => 'add',
         ]);

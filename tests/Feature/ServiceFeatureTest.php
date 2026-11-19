@@ -5,6 +5,7 @@ use App\Models\Service;
 use Laravel\Passport\Passport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Faker\Factory as Faker;
 
 class ServiceFeatureTest extends TestCase
 {
@@ -12,18 +13,19 @@ class ServiceFeatureTest extends TestCase
 
     public function test_user_can_create_service()
     {
-        $user = User::factory()->create();
-        Passport::actingAs($user);
+        $user = $this->authenticateUser();
+
+        $faker = Faker::create();
 
         $payload = [
-            'title' => fake()->sentence(3),
-            'description' => fake()->paragraph(),
+            'title' =>$faker->sentence(3),
+            'description' =>$faker->paragraph(),
             'points' => [
-                fake()->sentence(2),
-                fake()->sentence(2),
-                fake()->sentence(2),
+                $faker->sentence(2),
+               $faker->sentence(2),
+               $faker->sentence(2),
             ],
-            'special_point' => fake()->sentence(5),
+            'special_point' =>$faker->sentence(5),
         ];
 
         $response = $this->postJson(
@@ -41,20 +43,21 @@ class ServiceFeatureTest extends TestCase
 
     public function test_user_cannot_create_duplicate_title()
     {
-        $user = User::factory()->create();
-        Passport::actingAs($user);
+        $user = $this->authenticateUser();
 
         Service::factory()->for($user)->create([
             'title' => 'Infrastructure Development'
         ]);
 
+        $faker = Faker::create();
+
         $response = $this->postJson(
             route('api.user.service.store'),
             [
                 'title' => 'Infrastructure Development',
-                'description' => fake()->paragraph(),
+                'description' => $faker->paragraph(),
                 'points' => ['A'],
-                'special_point' => fake()->sentence(),
+                'special_point' => $faker->sentence(),
             ]
         );
 
@@ -67,6 +70,8 @@ class ServiceFeatureTest extends TestCase
         $user = User::factory()->create();
         Passport::actingAs($user);
 
+        $faker = Faker::create();
+
         $service = Service::factory()
             ->for($user)
             ->create([
@@ -75,7 +80,7 @@ class ServiceFeatureTest extends TestCase
 
         $payload = [
             'title' => 'New Title',
-            'description' => fake()->paragraph(),
+            'description' => $faker->paragraph(),
             'points' => ['Point A', 'Point B'],
             'special_point' => 'Updated Special'
         ];
@@ -95,17 +100,16 @@ class ServiceFeatureTest extends TestCase
 
     public function test_user_cannot_update_someone_elses_service()
     {
-        $user1 = User::factory()->create();
+        $user1 = $this->authenticateUser();
         $user2 = User::factory()->create();
-        Passport::actingAs($user1);
-
+       
         $service = Service::factory()
             ->for($user2)
             ->create();
 
         $response = $this->putJson(
             route('api.user.service.update', $service->uuid),
-            ['title' => 'Hacked Title']
+            ['title' => 'updated Title']
         );
 
         $response->assertStatus(403);
@@ -113,8 +117,7 @@ class ServiceFeatureTest extends TestCase
 
     public function test_user_cannot_update_to_duplicate_title()
     {
-        $user = User::factory()->create();
-        Passport::actingAs($user);
+        $user = $this->authenticateUser();
 
         Service::factory()->for($user)->create([
             'title' => 'Service One'
@@ -141,21 +144,21 @@ class ServiceFeatureTest extends TestCase
     public function test_different_users_can_create_same_title()
     {
         $user1 = User::factory()->create();
-        $user2 = User::factory()->create();
+        $user2 = $this->authenticateUser();
+
+        $faker = Faker::create();
 
         Service::factory()->for($user1)->create([
             'title' => 'Infrastructure Development'
         ]);
 
-        Passport::actingAs($user2);
-
         $response = $this->postJson(
             route('api.user.service.store'),
             [
                 'title' => 'Infrastructure Development',
-                'description' => fake()->paragraph(),
+                'description' => $faker->paragraph(),
                 'points' => ['A'],
-                'special_point' => fake()->sentence(),
+                'special_point' => $faker->sentence(),
             ]
         );
 
@@ -164,8 +167,7 @@ class ServiceFeatureTest extends TestCase
 
     public function test_user_can_delete_own_service()
     {
-        $user = User::factory()->create();
-        Passport::actingAs($user);
+        $user = $this->authenticateUser();
 
         $service = Service::factory()
             ->for($user)

@@ -8,8 +8,6 @@ use Faker\Factory as Faker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
-use Laravel\Passport\Client;
-use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class ContactFormFeatureTest extends TestCase
@@ -17,10 +15,7 @@ class ContactFormFeatureTest extends TestCase
     use RefreshDatabase;
     public function test_store_contact_form_successfully()
     {
-        Passport::actingAsClient(
-            Client::factory()->create(),
-            ['client_authentication']
-        );
+       $this->authenticateClient(); // Authenticate as a client
 
         Event::fake([
             NotifyOwnerEvent::class,

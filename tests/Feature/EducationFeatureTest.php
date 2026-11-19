@@ -12,18 +12,10 @@ class EducationFeatureTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function authenticate()
-    {
-        $user = User::factory()->create();
-        Passport::actingAs($user);
-
-        return $user;
-    }
-
     
     public function test_user_can_create_education()
     {
-        $this->authenticate();
+        $user = $this->authenticateUser();
 
         $data = Education::factory()->make()->toArray();
         unset($data['user_id'], $data['uuid']);
@@ -40,7 +32,7 @@ class EducationFeatureTest extends TestCase
     
     public function test_create_fails_with_invalid_data()
     {
-        $this->authenticate();
+        $user = $this->authenticateUser();
 
         $response = $this->postJson(route('education.store'), []);
 
@@ -51,7 +43,7 @@ class EducationFeatureTest extends TestCase
     
     public function test_user_can_update_own_education()
     {
-        $user = $this->authenticate();
+        $user = $this->authenticateUser();
 
         $education = Education::factory()->for($user)->create();
 
@@ -75,10 +67,8 @@ class EducationFeatureTest extends TestCase
     
     public function test_user_cannot_update_someone_else_education()
     {
-        $user1 = User::factory()->create();
+        $user1 = $this->authenticateUser();
         $user2 = User::factory()->create();
-
-        Passport::actingAs($user1);
 
         $education = Education::factory()->for($user2)->create();
 
@@ -93,7 +83,7 @@ class EducationFeatureTest extends TestCase
     
     public function test_user_can_delete_own_education()
     {
-        $user = $this->authenticate();
+        $user = $this->authenticateUser();
 
         $education = Education::factory()->for($user)->create();
 
@@ -111,10 +101,8 @@ class EducationFeatureTest extends TestCase
     
     public function test_user_cannot_delete_someone_else_education()
     {
-        $user1 = User::factory()->create();
+        $user1 = $this->authenticateUser();
         $user2 = User::factory()->create();
-
-        Passport::actingAs($user1);
 
         $education = Education::factory()->for($user2)->create();
 

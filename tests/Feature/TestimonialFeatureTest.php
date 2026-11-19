@@ -12,8 +12,7 @@ class TestimonialFeatureTest extends TestCase
     
     public function test_user_can_create_testimonial()
     {
-        $user = User::factory()->create();
-        Passport::actingAs($user);
+        $user = $this->authenticateUser();
 
         $payload = [
             'first_name' => 'John',
@@ -36,8 +35,7 @@ class TestimonialFeatureTest extends TestCase
     
     public function test_user_can_update_own_testimonial()
     {
-        $user = User::factory()->create();
-        Passport::actingAs($user);
+        $user = $this->authenticateUser();
 
         $testimonial = Testimonial::factory()->for($user)->create([
             'title' => 'Old Title'
@@ -61,9 +59,8 @@ class TestimonialFeatureTest extends TestCase
     
     public function test_user_cannot_update_someone_elses_testimonial()
     {
-        $user1 = User::factory()->create();
+        $user1 = $this->authenticateUser();
         $user2 = User::factory()->create();
-        Passport::actingAs($user1);
 
         $testimonial = Testimonial::factory()->for($user2)->create();
 
@@ -78,8 +75,7 @@ class TestimonialFeatureTest extends TestCase
     
     public function test_user_can_delete_own_testimonial()
     {
-        $user = User::factory()->create();
-        Passport::actingAs($user);
+        $user = $this->authenticateUser();
 
         $testimonial = Testimonial::factory()->for($user)->create();
 
@@ -97,9 +93,8 @@ class TestimonialFeatureTest extends TestCase
     
     public function test_user_cannot_delete_someone_elses_testimonial()
     {
-        $user1 = User::factory()->create();
+        $user1 = $this->authenticateUser();
         $user2 = User::factory()->create();
-        Passport::actingAs($user1);
 
         $testimonial = Testimonial::factory()->for($user2)->create();
 

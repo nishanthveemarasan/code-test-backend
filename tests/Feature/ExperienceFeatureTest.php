@@ -15,8 +15,7 @@ class ExperienceFeatureTest extends TestCase
     
     public function test_user_can_create_experience()
     {
-        $user = User::factory()->create();
-        Passport::actingAs($user);
+        $user = $this->authenticateUser();
 
         $data = Experience::factory()->make()->toArray();
         unset($data['user_id'], $data['uuid']);
@@ -38,8 +37,7 @@ class ExperienceFeatureTest extends TestCase
     
     public function test_user_can_update_own_experience()
     {
-        $user = User::factory()->create();
-        Passport::actingAs($user);
+        $user = $this->authenticateUser();
 
         $experience = Experience::factory()
                         ->for($user)
@@ -67,8 +65,7 @@ class ExperienceFeatureTest extends TestCase
     
     public function test_user_can_delete_own_experience()
     {
-        $user = User::factory()->create();
-        Passport::actingAs($user);
+        $user = $this->authenticateUser();
 
         $experience = Experience::factory()
                         ->for($user)
@@ -89,18 +86,16 @@ class ExperienceFeatureTest extends TestCase
     public function test_user_cannot_update_someone_else_experience()
     {
         $owner = User::factory()->create();
-        $attacker = User::factory()->create();
+        $loggedUser = $this->authenticateUser();
 
         $experience = Experience::factory()
                         ->for($owner)
                         ->create();
 
-        Passport::actingAs($attacker);
-
         $response = $this->putJson(
             route('api.user.experience.update', $experience->uuid),
             [
-                'role' => 'Hacked Role',
+                'role' => 'Updated Role',
                 'company' => $experience->company,
                 'from' => $experience->from,
                 'to' => $experience->to,
@@ -112,7 +107,7 @@ class ExperienceFeatureTest extends TestCase
 
         $this->assertDatabaseMissing('experiences', [
             'uuid' => $experience->uuid,
-            'role' => 'Hacked Role'
+            'role' => 'Updated Role'
         ]);
     }
 
@@ -120,13 +115,11 @@ class ExperienceFeatureTest extends TestCase
     public function test_user_cannot_delete_someone_else_experience()
     {
         $owner = User::factory()->create();
-        $attacker = User::factory()->create();
+        $loggedUser = $this->authenticateUser();
 
         $experience = Experience::factory()
                         ->for($owner)
                         ->create();
-
-        Passport::actingAs($attacker);
 
         $response = $this->deleteJson(
             route('api.user.experience.destroy', $experience->uuid)

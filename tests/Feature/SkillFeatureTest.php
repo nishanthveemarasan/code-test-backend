@@ -14,8 +14,7 @@ class SkillFeatureTest extends TestCase
 
     public function test_user_can_add_and_delete_skills()
     {
-        $user = User::factory()->create();
-        Passport::actingAs($user);
+        $user = $this->authenticateUser();
 
         // Create a pre-existing skill to delete
         $existingSkill = Skill::factory()
@@ -50,8 +49,7 @@ class SkillFeatureTest extends TestCase
 
     public function test_adding_existing_skill_does_not_duplicate()
     {
-        $user = User::factory()->create();
-        Passport::actingAs($user);
+        $user = $this->authenticateUser();
 
         $existingSkill = Skill::factory()
             ->for($user)
@@ -75,8 +73,7 @@ class SkillFeatureTest extends TestCase
 
     public function test_deleting_non_existing_skill_returns_not_found()
     {
-        $user = User::factory()->create();
-        Passport::actingAs($user);
+        $user = $this->authenticateUser();
 
         $payload = [
             'skills' => [
@@ -94,8 +91,7 @@ class SkillFeatureTest extends TestCase
 
     public function test_invalid_action_returns_validation_error()
     {
-        $user = User::factory()->create();
-        Passport::actingAs($user);
+        $user = $this->authenticateUser();
 
         $payload = [
             'skills' => [
