@@ -13,30 +13,17 @@ class AuthService{
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'username' => $data['username'] ,
         ]);
 
-        $token = $user->createToken('Personal Access Token')->accessToken;
+        $tokenResult = $user->createToken('API Token');
 
         return [
-            'user' => $user,
-            'token' => $token
+            'status' => true,
+            'message' => 'User registered successfully',
+            'access_token' => $tokenResult->accessToken,
         ];
     }
 
-    public function login(array $data)
-    {
-        if (!Auth::attempt($data)) {
-            return false;
-        }
 
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-        $token = $user->createToken('Personal Access Token')->accessToken;
-
-        return [
-            'user' => $user->only(['name']),
-            'token' => $token
-        ];
-
-    }
 }

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\ContactUsController;
 use App\Http\Controllers\API\EducationController;
 use App\Http\Controllers\API\ExperienceController;
@@ -54,10 +53,6 @@ Route::middleware(['auth:api'])->name('api.')->group(function () {
     });
 });
 
-Route::prefix('auth')->controller(AuthController::class)->middleware(['verify.signature'])->group(function () {
-    Route::post('register', 'register');
-    Route::post('login', 'login');
-});
 
 Route::get('generate/client-token', [TokenController::class, 'generateClientToken']);
 

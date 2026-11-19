@@ -33,6 +33,10 @@ class AppServiceProvider extends ServiceProvider
             'client_authentication' => 'Client only access',
         ]);
 
+        Passport::refreshTokensExpireIn(
+            now()->addDays(30)
+        );
+
         RateLimiter::for('global_api', function (Request $request) {
             return Limit::perMinute(60)->by($request->ip());
         });
@@ -41,7 +45,7 @@ class AppServiceProvider extends ServiceProvider
             return Limit::perMinute(5)->by($request->ip());
         });
 
-        $dropboxService = new DropboxService();
-        $dropboxService->connectDropbox('store_images');
+        // $dropboxService = new DropboxService();
+        // $dropboxService->connectDropbox('store_images');
     }
 }

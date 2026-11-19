@@ -30,17 +30,5 @@ class AuthController extends Controller
         }
     }
 
-    public function login(AutLoginRequest $request)
-    {
-        try{
-            $response = $this->authService->login($request->validated());
-            if(!$response){
-                return ApiResponse::error("Invalid Credentials");
-            }
-            return ApiResponse::success("Login Successful", $response);
-        }catch(\Exception $e){
-            Log::error('Registration failed: ' . $e->getMessage(). ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
-            return ApiResponse::error(self::ERROR_MSG);
-        }
-    }
+
 }
