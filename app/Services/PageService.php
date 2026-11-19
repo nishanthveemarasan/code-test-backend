@@ -9,7 +9,7 @@ class PageService
 {
     public function homePageData()
     {
-       // return Cache::remember('home_page_data', now()->addHours(6), function () {
+       return Cache::remember('home_page_data', now()->addHours(6), function () {
             $user = User::with([
                 'services:user_id,title,description',
                 'profile:user_id,email,phone,address',
@@ -30,7 +30,7 @@ class PageService
                 'year_of_experience' => $this->getExperinceYear($user),
                 'contact_info' => $user->profile->toResource()
             ];
-      //  });
+       });
     }
 
     public function servicesPageData()
@@ -67,7 +67,7 @@ class PageService
 
     public function AboutPage()
     {
-        // return Cache::remember('about_page_data', now()->addHours(6), function () {
+        return Cache::remember('about_page_data', now()->addHours(6), function () {
             $user = User::with([
                 'services:user_id,title,special_point',
                 'experiences' => function ($query) {
@@ -89,7 +89,7 @@ class PageService
                 'profile' => $user->profile->toResource(),
                 'year_of_experience' => $this->getExperinceYear($user)
             ];
-        // });
+        });
     }
 
     private function getExperinceYear(User $user)

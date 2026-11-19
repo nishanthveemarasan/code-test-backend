@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\Helper\ApiResponse;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProjectRequest;
 use App\Models\Project;
 use App\Services\ProjectService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
@@ -19,7 +21,9 @@ class ProjectController extends Controller
     {
         Gate::authorize('viewAny', Project::class);
         try {
-            $projects = $this->service->list(auth()->user());
+            /** @var \App\Models\User $user  */
+            $user = Auth::user();
+            $projects = $this->service->list($user);
             return ApiResponse::success("Projects retrieved successfully", $projects);
         } catch (\Exception $e) {
             Log::channel('exception')->error('Get Projects Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
@@ -48,7 +52,9 @@ class ProjectController extends Controller
 
         try {
             DB::beginTransaction();
-            $response = $this->service->storeOrUpdate($request->validated(), auth()->user(), $project);
+            /** @var \App\Models\User $user  */
+            $user = Auth::user();
+            $response = $this->service->storeOrUpdate($request->validated(), $user, $project);
             DB::commit();
             return ApiResponse::success("Project saved successfully", $response);
         } catch (\Exception $e) {

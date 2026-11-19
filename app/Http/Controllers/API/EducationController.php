@@ -8,6 +8,7 @@ use App\Http\Requests\StoreEducationRequest;
 use App\Models\Education;
 use App\Services\EducationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
@@ -19,7 +20,9 @@ class EducationController extends Controller
     {
         Gate::authorize('viewAny', Education::class);
         try {
-            $response = $this->service->list(auth()->user());
+            /** @var \App\Models\User $user  */
+            $user = Auth::user();
+            $response = $this->service->list($user);
             return ApiResponse::success("Education list retrieved successfully", $response);
         } catch (\Exception $e) {
             Log::channel('exception')->error('List Education Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
@@ -41,9 +44,11 @@ class EducationController extends Controller
     {
         Gate::authorize('create', Education::class);
         try {
+            /** @var \App\Models\User $user  */
+            $user = Auth::user();
             $response = $this->service->store(
                 $request->validated(),
-                auth()->user()
+                $user
             );
 
             return ApiResponse::success("Education created successfully", $response);

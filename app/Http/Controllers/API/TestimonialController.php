@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\Helper\ApiResponse;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTestimonialRequest;
 use App\Models\Testimonial;
 use App\Services\TestimonialService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
@@ -18,7 +20,9 @@ class TestimonialController extends Controller
     {
         Gate::authorize('viewAny', Testimonial::class);
         try {
-            $testimonials = $this->service->list(auth()->user());
+            /** @var \App\Models\User $user  */
+            $user = Auth::user();
+            $testimonials = $this->service->list($user);
             return ApiResponse::success("Testimonials retrieved successfully", $testimonials);
         } catch (\Exception $e) {
             Log::channel('exception')->error('Get Testimonials Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
@@ -41,7 +45,9 @@ class TestimonialController extends Controller
     {
         Gate::authorize('create', Testimonial::class);
         try {
-            $testimonial = $this->service->store($request->validated(), auth()->user());
+            /** @var \App\Models\User $user  */
+            $user = Auth::user();
+            $testimonial = $this->service->store($request->validated(), $user);
             return ApiResponse::success("Testimonial created successfully");
         } catch (\Exception $e) {
             Log::channel('exception')->error('Create Testimonial Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());

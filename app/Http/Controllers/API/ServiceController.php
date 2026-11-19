@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\Helper\ApiResponse;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreServiceRequest;
 use App\Models\Service;
 use App\Services\MyAreaService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
@@ -19,7 +21,9 @@ class ServiceController extends Controller
     {
         Gate::authorize('viewAny', Service::class);
         try {
-            $services = $this->service->list(auth()->user());
+            /** @var \App\Models\User $user  */
+            $user = Auth::user();
+            $services = $this->service->list($user);
             return ApiResponse::success("Services retrieved successfully", $services);
         } catch (\Exception $e) {
             Log::channel('exception')->error('Get Services Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
@@ -42,7 +46,9 @@ class ServiceController extends Controller
     {
         Gate::authorize('create', Service::class);
         try {
-            $this->service->store(auth()->user(), $request->validated());
+            /** @var \App\Models\User $user  */
+            $user = Auth::user();
+            $this->service->store($user, $request->validated());
             return ApiResponse::success("Service created successfully");
         } catch (\Exception $e) {
             Log::channel('exception')->error('Create Service Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());

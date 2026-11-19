@@ -25,8 +25,9 @@ class AuthController extends Controller
                 return ApiResponse::success(self::SUCCESS_MSG, $response);
             }
         }catch(\Exception $e){
-            Log::error('Registration failed: ' . $e->getMessage(). ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
-            return ApiResponse::error(self::ERROR_MSG);
+            $message = "Registration failed! Please try again later.";
+            $this->logException($message, $e);
+            return ApiResponse::error($message);
         }
     }
 

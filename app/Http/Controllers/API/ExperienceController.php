@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreExperienceRequest;
 use App\Models\Experience;
 use App\Services\ExperienceService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
@@ -19,7 +20,9 @@ class ExperienceController extends Controller
     {
         Gate::authorize('viewAny', Experience::class);
         try {
-            $experiences = $this->service->list(auth()->user());
+            /** @var \App\Models\User $user  */
+            $user = Auth::user();
+            $experiences = $this->service->list($user);
             return ApiResponse::success("Experiences retrieved successfully", $experiences);
         } catch (\Exception $e) {
             Log::channel('exception')->error('List Experiences Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
@@ -48,9 +51,11 @@ class ExperienceController extends Controller
     {
        Gate::authorize('create', Experience::class);
        try {
+             /** @var \App\Models\User $user  */
+             $user = Auth::user();
             $response = $this->service->createExperience(
                 $request->validated(),
-                auth()->user()
+                $user
             );
 
             return ApiResponse::success("Experience created successfully", $response);
@@ -72,9 +77,11 @@ class ExperienceController extends Controller
     {
         Gate::authorize('update', $experience);
         try {
+             /** @var \App\Models\User $user  */
+             $user = Auth::user();
             $experience = $this->service->updateExperience(
                 $request->validated(),
-                auth()->user(),
+                $user,
                 $experience
             );
             return ApiResponse::success("Experience updated successfully");
@@ -95,8 +102,10 @@ class ExperienceController extends Controller
     {
         Gate::authorize('delete', $experience);
         try {
+             /** @var \App\Models\User $user  */
+             $user = Auth::user();
             $this->service->deleteExperience(
-                auth()->user(),
+                $user,
                 $experience
             );
 

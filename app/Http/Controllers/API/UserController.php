@@ -9,6 +9,7 @@ use App\Http\Requests\StoreMainPageRequest;
 use App\Http\Requests\StoreProfileRequest;
 use App\Services\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -27,7 +28,9 @@ class UserController extends Controller
     {
         try {
             DB::beginTransaction();
-            $response = $this->userService->store($request->validated(), auth()->user());
+            /** @var \App\Models\User $user  */
+            $user = Auth::user();
+            $response = $this->userService->store($request->validated(), $user);
             DB::commit();
             return ApiResponse::success("Profile info saved successfully", $response);
         } catch (\Exception $e) {
@@ -42,7 +45,9 @@ class UserController extends Controller
 
         try {
             DB::beginTransaction();
-            $response = $this->userService->storeMainPage($request->validated(), auth()->user());
+            /** @var \App\Models\User $user  */
+            $user = Auth::user();
+            $response = $this->userService->storeMainPage($request->validated(), $user);
             DB::commit();
             return ApiResponse::success("Main page info saved successfully");
         } catch (DropboxUploadException $e) {
@@ -60,7 +65,9 @@ class UserController extends Controller
     public function getData()
     {
         try {
-            $response = $this->userService->getData(auth()->user());
+            /** @var \App\Models\User $user  */
+            $user = Auth::user();
+            $response = $this->userService->getData($user);
             return ApiResponse::success("Main page info retrieved successfully", $response);
         } catch (\Exception $e) {
             Log::channel('exception')->error('Get Main Page failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
@@ -71,7 +78,9 @@ class UserController extends Controller
     public function getProfileData()
     {
         try {
-            $response = $this->userService->getProfileData(auth()->user());
+            /** @var \App\Models\User $user  */
+            $user = Auth::user();
+            $response = $this->userService->getProfileData($user);
             return ApiResponse::success("Profile info retrieved successfully", $response);
         } catch (\Exception $e) {
             Log::channel('exception')->error('Get Profile failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());

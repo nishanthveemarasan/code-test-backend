@@ -28,9 +28,7 @@ class ContactUsController extends Controller
             }
             return ApiResponse::success("Your Message sent successfully! We will get back to you soon.");
         }catch(Exception $e){
-            $error = $e->getMessage(). " in file: " . $e->getFile() . " on line: " . $e->getLine();
-            Log::channel('exception')->error("Error storing contact us message: " . $error);
-            Mail::to(config('admin.owner.email'))->send(new SendContactSubmissionErrorMail($request->validated(), $error));
+            $this->logException("Contact Us Submission Failed : ", $e, $request->validated(),true);
             return ApiResponse::error(self::ERROR_MSG);
         }
     }

@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\Helper\ApiResponse;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSkillRequest;
 use App\Models\Skill;
 use App\Services\SkillService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
@@ -20,7 +22,9 @@ class SkillController extends Controller
     {
         Gate::authorize('viewAny', Skill::class);
         try {
-            $skills = $this->service->get(auth()->user());
+            /** @var \App\Models\User $user  */
+            $user = Auth::user();
+            $skills = $this->service->get($user);
             return ApiResponse::success("Skills retrieved successfully", $skills);
         } catch (\Exception $e) {
             Log::channel('exception')->error('Get Skills Failed: ' . $e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
@@ -32,8 +36,10 @@ class SkillController extends Controller
         Gate::authorize('create', Skill::class);
         try {
             DB::beginTransaction();
+            /** @var \App\Models\User $user  */
+            $user = Auth::user();
             $this->service->updateSkills(
-                auth()->user(),
+                $user,
                 $request->validated()['skills']
             );
             DB::commit();
