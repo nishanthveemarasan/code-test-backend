@@ -30,10 +30,6 @@ Route::middleware(['auth:api'])->name('api.')->group(function () {
             'store'
         ]);
 
-        Route::prefix('project')->name('project.')->controller(ProjectController::class)->group(function () {
-            Route::post('/{project}', 'store')->name('update');
-        });
-
         Route::resource('project', ProjectController::class)->only([
             'index',
             'show',
