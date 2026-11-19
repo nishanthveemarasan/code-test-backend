@@ -127,6 +127,20 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
+        'exception' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/exception.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 14,
+        ],
+        
+        'queueException' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/queue/exception.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 7,
+        ]
+
     ],
 
 ];

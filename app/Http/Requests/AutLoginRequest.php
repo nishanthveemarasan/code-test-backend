@@ -25,7 +25,7 @@ class AutLoginRequest extends FormRequest
     {
         
             return [
-                'email' => 'required|email|unique:users,email',
+                'email' => 'required|email|exists:users,email',
                 'password' => 'required|min:8|max:20',
             ];
     }
