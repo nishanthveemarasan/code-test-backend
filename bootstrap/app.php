@@ -22,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
                     ->middleware([
                         'api',
                         'client:client_authentication',
+                        'client.owner',
                         ForceJsonResponseMiddleware::class
                     ])
                     ->group(base_path('routes/client_credentials.php'));
