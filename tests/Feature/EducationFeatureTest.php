@@ -20,8 +20,8 @@ class EducationFeatureTest extends TestCase
         return $user;
     }
 
-    /** @test */
-    public function user_can_create_education()
+    
+    public function test_user_can_create_education()
     {
         $this->authenticate();
 
@@ -37,8 +37,8 @@ class EducationFeatureTest extends TestCase
         ]);
     }
 
-    /** @test */
-    public function create_fails_with_invalid_data()
+    
+    public function test_create_fails_with_invalid_data()
     {
         $this->authenticate();
 
@@ -48,8 +48,8 @@ class EducationFeatureTest extends TestCase
                  ->assertJsonValidationErrors(['from', 'course', 'institution']);
     }
 
-    /** @test */
-    public function user_can_update_own_education()
+    
+    public function test_user_can_update_own_education()
     {
         $user = $this->authenticate();
 
@@ -72,8 +72,8 @@ class EducationFeatureTest extends TestCase
         ]);
     }
 
-    /** @test */
-    public function user_cannot_update_someone_else_education()
+    
+    public function test_user_cannot_update_someone_else_education()
     {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
@@ -90,8 +90,8 @@ class EducationFeatureTest extends TestCase
         $response->assertStatus(403);
     }
 
-    /** @test */
-    public function user_can_delete_own_education()
+    
+    public function test_user_can_delete_own_education()
     {
         $user = $this->authenticate();
 
@@ -108,8 +108,8 @@ class EducationFeatureTest extends TestCase
         ]);
     }
 
-    /** @test */
-    public function user_cannot_delete_someone_else_education()
+    
+    public function test_user_cannot_delete_someone_else_education()
     {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();

@@ -11,8 +11,8 @@ class ContactInfoFeatureTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
-    public function authenticated_user_can_store_contact_info()
+    
+    public function test_authenticated_user_can_store_contact_info()
     {
         $user = User::factory()->create();
         Passport::actingAs($user);
@@ -37,8 +37,8 @@ class ContactInfoFeatureTest extends TestCase
         ]);
     }
 
-    /** @test */
-    public function invalid_data_returns_validation_error()
+
+    public function test_invalid_data_returns_validation_error()
     {
         $user = User::factory()->create();
         Passport::actingAs($user);
@@ -56,8 +56,7 @@ class ContactInfoFeatureTest extends TestCase
                  ->assertJsonValidationErrors(['phone', 'email', 'address']);
     }
 
-    /** @test */
-    public function guest_cannot_access_contact_info_route()
+    public function test_guest_cannot_access_contact_info_route()
     {
         $response = $this->postJson(route('api.user.contact-info'), []);
 

@@ -29,7 +29,7 @@ class SkillFeatureTest extends TestCase
             ]
         ];
 
-        $response = $this->postJson(route('api.user.skill.store'), $payload);
+        $response = $this->postJson(route('api.user.skills.store'), $payload);
 
         $response->assertStatus(200)
                  ->assertJson([
@@ -63,7 +63,7 @@ class SkillFeatureTest extends TestCase
             ]
         ];
 
-        $response = $this->postJson(route('api.user.skill.store'), $payload);
+        $response = $this->postJson(route('api.user.skills.store'), $payload);
 
         $response->assertStatus(200)
                  ->assertJson([
@@ -84,7 +84,7 @@ class SkillFeatureTest extends TestCase
             ]
         ];
 
-        $response = $this->postJson(route('api.user.skill.store'), $payload);
+        $response = $this->postJson(route('api.user.skills.store'), $payload);
 
         $response->assertStatus(200)
                  ->assertJson([
@@ -103,7 +103,7 @@ class SkillFeatureTest extends TestCase
             ]
         ];
 
-        $response = $this->postJson(route('api.user.skill.store'), $payload);
+        $response = $this->postJson(route('api.user.skills.store'), $payload);
 
         $response->assertStatus(422)
                  ->assertJsonValidationErrors(['skills.0.action']);
@@ -117,7 +117,7 @@ class SkillFeatureTest extends TestCase
             ]
         ];
 
-        $response = $this->postJson(route('api.user.skill.store'), $payload);
+        $response = $this->postJson(route('api.user.skills.store'), $payload);
 
         $response->assertStatus(401);
     }
