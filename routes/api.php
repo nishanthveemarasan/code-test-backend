@@ -28,6 +28,9 @@ Route::middleware(['auth:api'])->name('api.')->group(function () {
         Route::resource('skill', SkillController::class)->only([
             'index',
             'store'
+        ])->names([
+            'index' => 'skills.index',
+            'store' => 'skills.store',
         ]);
 
         Route::resource('project', ProjectController::class)->only([
@@ -35,7 +38,12 @@ Route::middleware(['auth:api'])->name('api.')->group(function () {
             'show',
             'store',
             'destroy'
-        ]);
+        ])->names([
+                'index' => 'projects.index',
+                'show' => 'projects.show',
+                'store' => 'projects.store',
+                'destroy' => 'projects.destroy',
+            ]);
 
         Route::resources([
             'testimonial' => TestimonialController::class,
