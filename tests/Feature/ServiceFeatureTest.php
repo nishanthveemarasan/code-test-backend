@@ -5,27 +5,25 @@ use App\Models\Service;
 use Laravel\Passport\Passport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use Faker\Factory as Faker;
+use Illuminate\Foundation\Testing\WithFaker;
 
 class ServiceFeatureTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     public function test_user_can_create_service()
     {
         $user = $this->authenticateUser();
 
-        $faker = Faker::create();
-
         $payload = [
-            'title' =>$faker->sentence(3),
-            'description' =>$faker->paragraph(),
+            'title' =>$this->faker->sentence(3),
+            'description' =>$this->faker->paragraph(),
             'points' => [
-                $faker->sentence(2),
-               $faker->sentence(2),
-               $faker->sentence(2),
+                $this->faker->sentence(2),
+               $this->faker->sentence(2),
+               $this->faker->sentence(2),
             ],
-            'special_point' =>$faker->sentence(5),
+            'special_point' =>$this->faker->sentence(5),
         ];
 
         $response = $this->postJson(
@@ -49,15 +47,13 @@ class ServiceFeatureTest extends TestCase
             'title' => 'Infrastructure Development'
         ]);
 
-        $faker = Faker::create();
-
         $response = $this->postJson(
             route('api.user.service.store'),
             [
                 'title' => 'Infrastructure Development',
-                'description' => $faker->paragraph(),
+                'description' => $this->faker->paragraph(),
                 'points' => ['A'],
-                'special_point' => $faker->sentence(),
+                'special_point' => $this->faker->sentence(),
             ]
         );
 
@@ -70,8 +66,6 @@ class ServiceFeatureTest extends TestCase
         $user = User::factory()->create();
         Passport::actingAs($user);
 
-        $faker = Faker::create();
-
         $service = Service::factory()
             ->for($user)
             ->create([
@@ -80,7 +74,7 @@ class ServiceFeatureTest extends TestCase
 
         $payload = [
             'title' => 'New Title',
-            'description' => $faker->paragraph(),
+            'description' => $this->faker->paragraph(),
             'points' => ['Point A', 'Point B'],
             'special_point' => 'Updated Special'
         ];
@@ -146,8 +140,6 @@ class ServiceFeatureTest extends TestCase
         $user1 = User::factory()->create();
         $user2 = $this->authenticateUser();
 
-        $faker = Faker::create();
-
         Service::factory()->for($user1)->create([
             'title' => 'Infrastructure Development'
         ]);
@@ -156,9 +148,9 @@ class ServiceFeatureTest extends TestCase
             route('api.user.service.store'),
             [
                 'title' => 'Infrastructure Development',
-                'description' => $faker->paragraph(),
+                'description' => $this->faker->paragraph(),
                 'points' => ['A'],
-                'special_point' => $faker->sentence(),
+                'special_point' => $this->faker->sentence(),
             ]
         );
 
