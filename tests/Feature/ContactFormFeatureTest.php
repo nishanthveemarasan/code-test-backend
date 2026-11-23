@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Events\NotifyOwnerEvent;
 use App\Events\NotifyUserEvent;
-use Faker\Factory as Faker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
@@ -12,7 +11,7 @@ use Tests\TestCase;
 
 class ContactFormFeatureTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
     public function test_store_contact_form_successfully()
     {
        $this->authenticateClient(); // Authenticate as a client
@@ -22,15 +21,13 @@ class ContactFormFeatureTest extends TestCase
             NotifyUserEvent::class,
         ]);
 
-        $faker = Faker::create();
-
         $data = [
-            'name' => $faker->name,
+            'name' => $this->faker->name,
             'phone' => '+77423432423',
-            'email' => $faker->safeEmail,
-            'address' => $faker->address,
-            'subject' => $faker->sentence,
-            'message' => $faker->paragraph,
+            'email' => $this->faker->safeEmail,
+            'address' => $this->faker->address,
+            'subject' => $this->faker->sentence,
+            'message' => $this->faker->paragraph,
         ];
 
         $response = $this->postJson(
@@ -43,7 +40,8 @@ class ContactFormFeatureTest extends TestCase
                  ->assertJsonStructure(['message', 'data']);
 
         $this->assertDatabaseHas('contact_us', [
-            'email' => $data['email'] 
+            'email' => $data['email'],
+            'phone' => '+77423432423'
         ]);
 
          // Assert owner notification event dispatched
