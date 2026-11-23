@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Skill;
 use Laravel\Passport\Passport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 
 class SkillFeatureTest extends TestCase
 {
