@@ -5,25 +5,23 @@ use Tests\TestCase;
 use App\Models\User;
 use Laravel\Passport\Passport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Faker\Factory as Faker;
+use Illuminate\Foundation\Testing\WithFaker;
 
 class ContactInfoFeatureTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     
     public function test_authenticated_user_can_store_contact_info()
     {
         $user = $this->authenticateUser();
 
-        $faker = Faker::create();
-
         $response = $this->postJson(
             route('api.user.contact-info'),  // Named route
             [
-                'phone' => $faker->phoneNumber,
-                'email' => $faker->safeEmail,
-                'address' => $faker->address,
+                'phone' => $this->faker->phoneNumber,
+                'email' => $this->faker->safeEmail,
+                'address' => $this->faker->address,
             ]
         );
 
