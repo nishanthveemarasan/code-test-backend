@@ -7,10 +7,11 @@ use App\Models\User;
 use App\Models\Experience;
 use Laravel\Passport\Passport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 
 class ExperienceFeatureTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     
     public function test_user_can_create_experience()
