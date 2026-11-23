@@ -7,10 +7,11 @@ use App\Models\User;
 use App\Models\Education;
 use Laravel\Passport\Passport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 
 class EducationFeatureTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     
     public function test_user_can_create_education()
